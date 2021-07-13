@@ -22,6 +22,10 @@ export default class WordBall {
     this.acceleration = p5.createVector(0, 0);
   }
 
+  incrementCount() {
+    this.count++;
+  }
+
   randomPointInCircle({ p5, centerPosition, circleRadius }) {
     const angle = p5.random() * p5.TWO_PI;
     const radius = p5.random(0, circleRadius);
