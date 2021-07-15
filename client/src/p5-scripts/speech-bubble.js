@@ -1,24 +1,33 @@
 import stem from "wink-porter2-stemmer";
 import WordBall from "./word-ball";
 import Link from "./link";
+// import P5sound from "p5/lib/addons/p5.sound";
 
 export default class SpeechBubble {
-  constructor({ text, filename, duration, p5 }) {
+  constructor({ text, filename, duration, p }) {
     this.text = text;
     this.filename = filename;
     this.duration = duration;
     this.wordBalls = [];
     this.links = [];
 
+    // this.audio = p.loadSound(`media/audio/${this.filename}`, () => {
+    //   this.audio.play();
+    // });
+
     this.words = this.getNormalizedWords(this.text);
     this.processedWordIndex = 0;
     this.wordToBallMap = {};
 
-    this.position = p5.createVector(p5.width / 2, p5.height / 2);
-    this.size = (p5.height * 0.75) / 2;
+    this.position = p.createVector(p.width / 2, p.height / 2);
+    this.size = (p.height * 0.75) / 2;
+    this.phase = 0;
+    this.zOff = 0;
+    this.noiseMax = 3;
 
-    this.processTextOverTime(p5);
-    // this.processAllText(p5);
+    this.processTextOverTime(p);
+    // this.audio.play();
+    // this.processAllText(p);
   }
 
   getNormalizedWords(text) {
@@ -32,13 +41,13 @@ export default class SpeechBubble {
     return words;
   }
 
-  processAllText(p5) {
+  processAllText(p) {
     let processedWords = this.processText(this.text);
     // processedWords = processedWords.splice(0, 10);
     processedWords.forEach((processedWord) => {
       const { word, count } = processedWord;
       const wordBall = new WordBall({
-        p5,
+        p,
         word,
         count,
         containerCenter: this.position,
@@ -48,7 +57,7 @@ export default class SpeechBubble {
     });
   }
 
-  processTextOverTime(p5) {
+  processTextOverTime(p) {
     const intervalDuration = this.duration / this.words.length;
 
     const processTextInterval = setInterval(() => {
@@ -66,18 +75,18 @@ export default class SpeechBubble {
       } else {
         // new word, create word ball
         const wordBall = new WordBall({
-          p5,
+          p,
           word,
           count: 1,
           containerCenter: this.position,
-          containerSize: this.size,
+          containerSize: this.size / 2,
         });
 
         this.wordBalls.push(wordBall);
         this.wordToBallMap[word] = wordBall;
       }
 
-      this.generateLinkForWordAtIndex({ p5, index: this.processedWordIndex });
+      this.generateLinkForWordAtIndex({ p, index: this.processedWordIndex });
       this.processedWordIndex++;
     }, intervalDuration);
   }
@@ -99,7 +108,7 @@ export default class SpeechBubble {
     return processedWordsArray;
   }
 
-  generateLinkForWordAtIndex({ p5, index }) {
+  generateLinkForWordAtIndex({ p, index }) {
     if (index === 0) return;
     const startWord = this.words[index - 1];
     const endWord = this.words[index];
@@ -108,28 +117,78 @@ export default class SpeechBubble {
     const endWordBall = this.wordToBallMap[endWord];
 
     const link = new Link({
-      p5,
+      p,
       start: startWordBall.position,
       end: endWordBall.position,
     });
     this.links.push(link);
   }
 
-  draw(p5) {
-    // p5.fill(0);
-    // p5.noStroke();
-    // p5.stroke(0);
-    // p5.circle(this.position.x, this.position.y, this.size * 2);
+  drawSpeechBubble(p) {
+    let xOffset = p.sin(this.zOff * 0.05) * 100;
+    let yOffset = p.cos(this.zOff * 0.05) * 100;
 
+    // console.log("xOffset,yOffset", xOffset, yOffset);
+    p.push();
+    p.translate(this.position.x, this.position.y);
+
+    const circleResolution = 200;
+    const angleIncr = p.TWO_PI / circleResolution;
+
+    for (let ringIndex = 0; ringIndex < 50; ringIndex += 1) {
+      p.beginShape();
+      p.noFill();
+      p.strokeWeight((ringIndex * 5) / circleResolution);
+      p.stroke((ringIndex + this.zOff * 500) % 100, 50, 100);
+      for (let angle = 0; angle < p.TWO_PI; angle += angleIncr) {
+        //   let xoff = p.map(p.cos(angle + this.phase), -1, 1, 0, this.noiseMax);
+        //   let yoff = p.map(p.sin(angle + this.phase), -1, 1, 0, this.noiseMax);
+
+        //   const r = p.map(
+        //     p.noise(xoff, yoff, this.zoff),
+        //     0,
+        //     1,
+        //     this.size,
+        //     p.height / 2
+        //   );
+        const r = this.size * 2;
+        const n = p.noise(
+          xOffset + p.sin(angle) * 0.01 * ringIndex,
+          yOffset + p.cos(angle) * 0.01 * ringIndex,
+          this.zOff
+        );
+        //   console.log(n);
+        let x = r * n * p.cos(angle);
+        let y = r * n * p.sin(angle);
+        //   console.log("x,y", x, y);
+        p.vertex(x, y);
+      }
+      p.endShape(p.CLOSE);
+    }
+    p.pop();
+
+    this.phase += 0.005;
+    this.zOff += 0.0003;
+  }
+
+  draw(p) {
+    this.drawSpeechBubble(p);
+    // p.noLoop();
+    // p.fill(0);
+    // p.noStroke();
+    // p.stroke(0);
+    // p.circle(this.position.x, this.position.y, this.size * 2);
+    //
     // this.links.forEach((link) => {
-    //   link.draw(p5);
+    //   link.draw(p);
     // });
 
     this.wordBalls.forEach((wordBall) => {
-      wordBall.behaviors({ p5, wordBalls: this.wordBalls });
-      wordBall.update(p5);
-
-      wordBall.draw(p5);
+      wordBall.behaviors({ p, wordBalls: this.wordBalls });
+      wordBall.update(p);
+      wordBall.draw(p);
     });
+
+    // p.noLoop();
   }
 }

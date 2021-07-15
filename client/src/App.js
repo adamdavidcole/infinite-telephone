@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import stem from "wink-porter2-stemmer";
 import p5 from "p5";
+// import p5 from 'p5';
+import "p5/lib/addons/p5.sound";
+// import "p5/lib/addons/p5.dom";
+// import "p5/lib/addons/p5.sound";
 
 // import P5Wrapper from "react-p5-wrapper";
 
