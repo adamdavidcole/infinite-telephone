@@ -11,6 +11,7 @@ import WordBall from "./word-ball";
 import Link from "./link";
 // import P5sound from "p5/lib/addons/p5.sound";
 
+const aOffIncrement = 0.01;
 export default class SpeechBubble {
   constructor({ p, id, visibleBubbleCount, index, speechBubbleMap }) {
     this.id = id;
@@ -21,6 +22,8 @@ export default class SpeechBubble {
     this.wordBalls = [];
     this.links = [];
 
+    this.aOff = p.map(index, 0, visibleBubbleCount - 1, -p.PI, p.PI);
+
     // this.audio = p.loadSound(`media/audio/${this.filename}`, () => {
     //   this.audio.play();
     // });
@@ -29,13 +32,29 @@ export default class SpeechBubble {
     // this.processedWordIndex = 0;
     this.wordToBallMap = {};
 
-    const angle = (p.TWO_PI / visibleBubbleCount) * index;
-    const r = (2 * p.width) / visibleBubbleCount;
-    const x = r * p.cos(angle) + p.width / 2;
-    const y = r * p.sin(angle) + p.height / 2;
+    if (window.MODE === window.modes.LINEAR) {
+      // SEQUENTIAL
+      const padding = 50;
+      this.size = p.height * 0.15;
+      const x = p.map(
+        index,
+        0,
+        visibleBubbleCount - 1,
+        this.size + padding,
+        p.width - this.size - padding
+      );
+      const y = this.getYOffset(p);
 
-    this.position = p.createVector(x, y);
-    this.size = r / 4;
+      this.position = p.createVector(x, y);
+    } else if (window.MODE === window.modes.RADIAL) {
+      //  RADIAL
+      const angle = (p.TWO_PI / visibleBubbleCount) * index;
+      const r = (2 * p.width) / visibleBubbleCount;
+      const x = r * p.cos(angle) + p.width / 2;
+      const y = r * p.sin(angle) + p.height / 2;
+      this.position = p.createVector(x, y);
+      this.size = r / 4;
+    }
 
     // this.position = p.createVector(p.width / 2, p.height / 2);
     // this.size = (p.height * 0.75) / 2;
@@ -47,6 +66,11 @@ export default class SpeechBubble {
     // this.audio.play();
     this.generateWordBalls(p);
     this.generateLinks(p);
+    this.initialSeperation(p);
+  }
+
+  getYOffset(p) {
+    return p.height / 2; //p.sin(this.aOff) * 25;
   }
 
   getNormalizedWords(text) {
@@ -79,6 +103,15 @@ export default class SpeechBubble {
 
   getWordBall(word) {
     return this.wordToBallMap[word];
+  }
+
+  initialSeperation(p) {
+    for (let i = 0; i < 200; i++) {
+      this.wordBalls.forEach((wordBall) => {
+        wordBall.behaviors({ p, wordBalls: this.wordBalls });
+        wordBall.update(p);
+      });
+    }
   }
 
   generateLinks(p) {
@@ -178,7 +211,6 @@ export default class SpeechBubble {
     let xOffset = p.sin(this.zOff * 0.05) * 100;
     let yOffset = p.cos(this.zOff * 0.05) * 100;
 
-    // console.log("xOffset,yOffset", xOffset, yOffset);
     p.push();
     p.translate(this.position.x, this.position.y);
 
@@ -222,6 +254,11 @@ export default class SpeechBubble {
     this.zOff += 0.0003;
   }
 
+  update(p) {
+    // this.aOff += aOffIncrement;
+    // this.position.y = this.getYOffset(p);
+  }
+
   draw(p) {
     // this.drawSpeechBubble(p);
     // p.noLoop();
@@ -236,6 +273,8 @@ export default class SpeechBubble {
     this.links.forEach((link) => {
       link.draw(p);
     });
+
+    this.update(p);
 
     this.wordBalls.forEach((wordBall) => {
       wordBall.behaviors({ p, wordBalls: this.wordBalls });

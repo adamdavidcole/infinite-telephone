@@ -10,7 +10,7 @@ export default class WordBall {
     this.containerCenter = containerCenter;
     this.containerSize = containerSize;
 
-    this.maxspeed = 0.5;
+    this.maxspeed = 0.05;
     this.maxforce = 0.15;
 
     this.position = this.randomPointInCircle({

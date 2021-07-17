@@ -3,6 +3,12 @@ import data from "../data/audio-data.json";
 import { getOrderedIds } from "../data/data-processor";
 import { processData } from "../data/data-processor";
 
+window.modes = {
+  LINEAR: "linear",
+  RADIAL: "radial",
+};
+window.MODE = window.modes.LINEAR;
+
 let sketch = (p) => {
   //   window.p5 = p;
   //   console.log(window.p5);
@@ -13,7 +19,11 @@ let sketch = (p) => {
   const speechBubbleMap = {};
 
   p.setup = function () {
-    p.createCanvas(600, 600);
+    if (window.MODE === window.modes.LINEAR) {
+      p.createCanvas(1200, 300);
+    } else if (window.MODE === window.modes.RADIAL) {
+      p.createCanvas(1000, 1000);
+    }
     p.background(0);
 
     // const initialData = data[0];
