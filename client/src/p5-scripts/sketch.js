@@ -1,5 +1,6 @@
 import SpeechBubble from "./speech-bubble";
 import data from "../data/audio-data.json";
+import { getOrderedIds } from "../data/data-processor";
 import { processData } from "../data/data-processor";
 
 let sketch = (p) => {
@@ -9,16 +10,42 @@ let sketch = (p) => {
   let x = 100;
   let y = 100;
   const speechBubbles = [];
+  const speechBubbleMap = {};
 
   p.setup = function () {
     p.createCanvas(600, 600);
     p.background(0);
 
-    const initialData = data[0];
-    const speechBubble = new SpeechBubble({ p, ...initialData });
-    speechBubbles.push(speechBubble);
+    // const initialData = data[0];
+    // const speechBubble = new SpeechBubble({ p, ...initialData });
+    // speechBubbles.push(speechBubble);
 
     processData();
+
+    const sortedIds = getOrderedIds();
+
+    const visibleBubbleCount = sortedIds.length;
+
+    // const id = sortedIds[0];
+    // const speechBubble = new SpeechBubble({
+    //     p,
+    //     id,
+    //     index: 0,
+    //     visibleBubbleCount,
+    //   });
+    //   speechBubbles.push(speechBubble);
+
+    sortedIds.forEach((id, index) => {
+      const speechBubble = new SpeechBubble({
+        p,
+        id,
+        index,
+        visibleBubbleCount,
+        speechBubbleMap,
+      });
+      speechBubbles.push(speechBubble);
+      speechBubbleMap[id] = speechBubble;
+    });
   };
 
   p.draw = function () {
@@ -26,6 +53,7 @@ let sketch = (p) => {
     p.background(0);
     p.blendMode(p.ADD);
 
+    p.noStroke();
     p.fill(255);
     p.textSize(32);
     p.text(p.round(p.frameRate()), 10, 30);

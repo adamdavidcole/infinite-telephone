@@ -19,10 +19,37 @@ import { isEmpty } from "lodash";
  *      wordsInCommon: string[],
  *      consecutiveWordCounts: Record<sring, number>
  *   }
+ *   sortedIds: string[],
  * }
  */
-const dataStore = {};
+const dataStore = {
+  sortedIds: [],
+};
 const mostCommonWordsMap = {};
+
+export function getOrderedIds() {
+  return [...dataStore.sortedIds];
+}
+
+export function getWordCountsById(id) {
+  return dataStore?.[id]?.wordCounts;
+}
+
+export function getWordsInCommonById(id) {
+  return dataStore?.[id]?.wordsInCommon;
+}
+
+export function getConsecutiveWordCounts(id) {
+  return dataStore?.[id]?.consecutiveWordCounts;
+}
+
+export function getNextId(id) {
+  return dataStore?.[id]?.nextAudioId;
+}
+
+export function getPrevId(id) {
+  return dataStore?.[id]?.prevAudioId;
+}
 
 function isCommonWord(word) {
   if (isEmpty(mostCommonWordsMap)) {
@@ -62,6 +89,8 @@ export function processData() {
       prevAudioId,
       nextAudioId,
     };
+
+    dataStore.sortedIds.push(audioData.id);
   }
 
   // process word counts per audio clip
@@ -121,6 +150,5 @@ export function processData() {
 
     dataStore[id].consecutiveWordCounts = nextCumulativeCounts;
     cumulativeCounts = nextCumulativeCounts;
-    console.log("dataStore", dataStore);
   }
 }

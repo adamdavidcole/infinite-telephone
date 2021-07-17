@@ -1,13 +1,14 @@
 export default class Link {
-  constructor({ p5, start, end }) {
+  constructor({ p, start, end, weight }) {
     this.start = start;
     this.end = end;
+    this.weight = weight;
   }
 
-  draw(p5) {
-    p5.fill(255);
-    p5.strokeWeight(1);
-    p5.stroke(255, 10);
-    p5.line(this.start.x, this.start.y, this.end.x, this.end.y);
+  draw(p) {
+    p.fill(255);
+    p.strokeWeight(this.weight);
+    p.stroke(255);
+    p.line(this.start.x, this.start.y, this.end.x, this.end.y);
   }
 }

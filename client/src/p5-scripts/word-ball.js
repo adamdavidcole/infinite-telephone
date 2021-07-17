@@ -117,6 +117,7 @@ export default class WordBall {
   }
 
   draw(p) {
+    p.noStroke();
     p.fill(255);
     p.circle(this.position.x, this.position.y, this.getSize(p));
   }
