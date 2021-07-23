@@ -89,7 +89,8 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <div id="app__canvas" ref={processingRef}></div>
+      {/* <header className="App-header">
         <div id="app__canvas" ref={processingRef}></div>
         <br />
         {isRecording ? (
@@ -104,7 +105,7 @@ function App() {
           {JSON.stringify(processedWords, null, 2)}
         </div>
       </header>
-      <p className="App-intro">{data}</p>
+      <p className="App-intro">{data}</p> */}
     </div>
   );
 }

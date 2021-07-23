@@ -2,21 +2,25 @@ import { Vector } from "p5";
 
 const offsetIncrement = 0.01;
 export default class Link {
-  constructor({ p, start, end, weight }) {
+  constructor({ p, start, end, weight, word }) {
     this.start = start;
     this.end = end;
     this.weight = weight;
+    this.word = word;
 
     // this.offsetY = p.random(-50, 50);
     this.xOff = p.random(100000);
   }
 
   draw(p) {
-    p.fill(255);
+    const r = p.pow(this.word.charCodeAt(0), 2) % 255;
+    const g = 60;
+    const b = p.pow(this.word.charCodeAt(1), 1) % 255;
+    // p.fill(r, 50, b);
     p.strokeWeight(this.weight);
 
-    const stroke = p.map(this.weight, 1, 5, 50, 100);
-    p.stroke(stroke);
+    const stroke = p.map(this.weight, 1, 5, 100, 200);
+    p.stroke(r, g, b, stroke);
 
     p.noFill();
     // p.stroke(110, 100, 0);

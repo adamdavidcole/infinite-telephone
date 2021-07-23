@@ -5,15 +5,24 @@ import {
   getWordCountsById,
   getWordsInCommonById,
   getPrevId,
+  getNextId,
   getConsecutiveWordCounts,
 } from "../data/data-processor";
 import WordBall from "./word-ball";
+import Path from "./path";
 import Link from "./link";
 // import P5sound from "p5/lib/addons/p5.sound";
 
 const aOffIncrement = 0.01;
 export default class SpeechBubble {
-  constructor({ p, id, visibleBubbleCount, index, speechBubbleMap }) {
+  constructor({
+    p,
+    id,
+    visibleBubbleCount,
+    index,
+    speechBubbleMap,
+    displayAudioBubble,
+  }) {
     this.id = id;
     this.speechBubbleMap = speechBubbleMap;
     // this.text = text;
@@ -21,6 +30,8 @@ export default class SpeechBubble {
     // this.duration = duration;
     this.wordBalls = [];
     this.links = [];
+    this.displayAudioBubble = displayAudioBubble;
+    // this.path = false ? new Path() : undefined;
 
     this.aOff = p.map(index, 0, visibleBubbleCount - 1, -p.PI, p.PI);
 
@@ -35,7 +46,7 @@ export default class SpeechBubble {
     if (window.MODE === window.modes.LINEAR) {
       // SEQUENTIAL
       const padding = 50;
-      this.size = p.height * 0.15;
+      this.size = this.displayAudioBubble ? 100 : 50;
       const x = p.map(
         index,
         0,
@@ -64,9 +75,31 @@ export default class SpeechBubble {
 
     // this.processTextOverTime(p);
     // this.audio.play();
+    // this.generateWordBalls(p);
+    // this.generateLinks(p);
+    // this.initialSeperation(p);
+  }
+
+  initialize(p) {
+    this.giveAudioDisplayPadding(p);
     this.generateWordBalls(p);
     this.generateLinks(p);
     this.initialSeperation(p);
+  }
+
+  giveAudioDisplayPadding() {
+    const prevBubbleId = getPrevId(this.id);
+    const nextBubbleId = getNextId(this.id);
+    const prevSpeechBubble = this.speechBubbleMap[prevBubbleId];
+    const nextSpeechBubble = this.speechBubbleMap[nextBubbleId];
+
+    if (prevSpeechBubble?.displayAudioBubble) {
+      this.position.x += 50;
+    }
+
+    if (nextSpeechBubble?.displayAudioBubble) {
+      this.position.x -= 50;
+    }
   }
 
   getYOffset(p) {
@@ -84,17 +117,28 @@ export default class SpeechBubble {
     return words;
   }
 
+  willHaveLinkForWord(word) {
+    const wordsInCommon = getWordsInCommonById(this.id);
+    const nextId = getNextId(this.id);
+    const nextWordsInCommon = getWordsInCommonById(nextId) || [];
+    return wordsInCommon.includes(word) || nextWordsInCommon.includes(word);
+  }
+
   generateWordBalls(p) {
     const wordCounts = getWordCountsById(this.id);
     // processedWords = processedWords.splice(0, 10);
     Object.keys(wordCounts).forEach((word) => {
+      //   if (!this.willHaveLinkForWord(word)) return;
+
       const count = wordCounts[word];
       const wordBall = new WordBall({
         p,
         word,
-        count,
+        count: this.displayAudioBubble ? 0 : count,
         containerCenter: this.position,
-        containerSize: this.size,
+        containerSize: this.displayAudioBubble ? 1 : this.size,
+        path: this.path,
+        // maxspeed: 0.35,
       });
       this.wordBalls.push(wordBall);
       this.wordToBallMap[word] = wordBall;
@@ -119,6 +163,7 @@ export default class SpeechBubble {
     if (isUndefined(prevBubbleId)) return;
 
     const prevSpeechBubble = this.speechBubbleMap[prevBubbleId];
+    if (!prevSpeechBubble) return;
 
     const wordsInCommon = getWordsInCommonById(this.id);
     const consecutiveWordCount = getConsecutiveWordCounts(this.id);
@@ -128,11 +173,17 @@ export default class SpeechBubble {
       const endWordBall = this.getWordBall(word);
       const weight = consecutiveWordCount?.[word] || 1;
 
+      if (!startWordBall || !endWordBall) {
+        console.log("missing ball for link", word, this.id);
+        return;
+      }
+
       const link = new Link({
         p,
         start: startWordBall.position,
         end: endWordBall.position,
         weight,
+        word,
       });
       this.links.push(link);
     });
@@ -140,39 +191,40 @@ export default class SpeechBubble {
     // this.getWordBallFromSpeechBall({ id: this.id, word: wordsInCommon[0] });
   }
 
-  processTextOverTime(p) {
-    const intervalDuration = this.duration / this.words.length;
+  //   processTextOverTime(p) {
+  //     const intervalDuration = this.duration / this.words.length;
 
-    const processTextInterval = setInterval(() => {
-      if (this.processedWordIndex === this.words.length) {
-        clearInterval(processTextInterval);
-        return;
-      }
+  //     const processTextInterval = setInterval(() => {
+  //       if (this.processedWordIndex === this.words.length) {
+  //         clearInterval(processTextInterval);
+  //         return;
+  //       }
 
-      const word = this.words[this.processedWordIndex];
+  //       const word = this.words[this.processedWordIndex];
 
-      if (this.wordToBallMap[word]) {
-        // existing word: increment count
-        const wordBall = this.wordToBallMap[word];
-        wordBall.incrementCount();
-      } else {
-        // new word, create word ball
-        const wordBall = new WordBall({
-          p,
-          word,
-          count: 1,
-          containerCenter: this.position,
-          containerSize: this.size / 2,
-        });
+  //       if (this.wordToBallMap[word]) {
+  //         // existing word: increment count
+  //         const wordBall = this.wordToBallMap[word];
+  //         wordBall.incrementCount();
+  //       } else {
+  //         // new word, create word ball
+  //         const wordBall = new WordBall({
+  //           p,
+  //           word,
+  //           count: 1,
+  //           containerCenter: this.position,
+  //           containerSize: this.size / 2,
+  //           path: this.path,
+  //         });
 
-        this.wordBalls.push(wordBall);
-        this.wordToBallMap[word] = wordBall;
-      }
+  //         this.wordBalls.push(wordBall);
+  //         this.wordToBallMap[word] = wordBall;
+  //       }
 
-      this.generateLinkForWordAtIndex({ p, index: this.processedWordIndex });
-      this.processedWordIndex++;
-    }, intervalDuration);
-  }
+  //       this.generateLinkForWordAtIndex({ p, index: this.processedWordIndex });
+  //       this.processedWordIndex++;
+  //     }, intervalDuration);
+  //   }
 
   processText(text) {
     const processedWords = {};
@@ -234,12 +286,13 @@ export default class SpeechBubble {
         //     this.size,
         //     p.height / 2
         //   );
-        const r = this.size * 2;
-        const n = p.noise(
+        const r = p.height * 0.5; //this.size * 4;
+        let n = p.noise(
           xOffset + p.sin(angle) * 0.01 * ringIndex,
           yOffset + p.cos(angle) * 0.01 * ringIndex,
           this.zOff
         );
+        // n = 1;
         //   console.log(n);
         let x = r * n * p.cos(angle);
         let y = r * n * p.sin(angle);
@@ -260,11 +313,11 @@ export default class SpeechBubble {
   }
 
   draw(p) {
-    // this.drawSpeechBubble(p);
-    // p.noLoop();
-    // p.fill(0);
-    // p.noStroke();
-    // p.stroke(0);
+    if (this.displayAudioBubble) {
+      this.path?.clearPoints();
+      this.drawSpeechBubble(p);
+    }
+
     p.noFill();
     p.stroke(255);
     p.strokeWeight(1);
@@ -281,6 +334,8 @@ export default class SpeechBubble {
       wordBall.update(p);
       wordBall.draw(p);
     });
+
+    // this.path.draw(p);
 
     // p.noLoop();
   }
