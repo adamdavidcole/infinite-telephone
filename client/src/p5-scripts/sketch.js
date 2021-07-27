@@ -4,6 +4,9 @@ import { getOrderedIds } from "../data/data-processor";
 import { processData } from "../data/data-processor";
 import Path from "./path";
 import WordBall from "./word-ball";
+import WordStrip from "./word-strip";
+
+const SAVE_PHOTO = false;
 
 window.modes = {
   LINEAR: "linear",
@@ -12,8 +15,15 @@ window.modes = {
 window.MODE = window.modes.LINEAR;
 
 let path;
+
+let wordStrip;
+let wordStrips = [];
+const wordStripMap = {};
+
 let wordBalls = [];
 const wordBallCount = 20;
+
+const WIDTH_PER_STRIP = 200;
 
 let sketch = (p) => {
   //   window.p5 = p;
@@ -25,8 +35,11 @@ let sketch = (p) => {
   const speechBubbleMap = {};
 
   p.setup = function () {
+    if (SAVE_PHOTO) p.pixelDensity(4);
+
     if (window.MODE === window.modes.LINEAR) {
-      p.createCanvas(p.windowWidth, p.windowWidth * (9 / 16));
+      const canvasWidth = WIDTH_PER_STRIP * data.length;
+      p.createCanvas(canvasWidth, p.windowWidth * (9 / 16) * 2);
     } else if (window.MODE === window.modes.RADIAL) {
       p.createCanvas(1000, 1000);
     }
@@ -42,6 +55,41 @@ let sketch = (p) => {
 
     const visibleBubbleCount = sortedIds.length;
 
+    // const id = sortedIds[1];
+    // wordStrip = new WordStrip({
+    //   p,
+    //   id,
+    //   index: 1,
+    //   visibleBubbleCount,
+    //   wordStripMap,
+    // });
+    // const id2 = sortedIds[2];
+    // const wordStrip2 = new WordStrip({
+    //   p,
+    //   id: id2,
+    //   index: 2,
+    //   visibleBubbleCount,
+    //   wordStripMap,
+    // });
+    // wordStrips.push(wordStrip, wordStrip2);
+
+    // wordStripMap[id] = wordStrip;
+    // wordStripMap[id2] = wordStrip2;
+
+    sortedIds.forEach((id, index) => {
+      const wordStrip = new WordStrip({
+        p,
+        id,
+        index,
+        visibleBubbleCount,
+        wordStripMap,
+      });
+      wordStrips.push(wordStrip);
+      wordStripMap[id] = wordStrip;
+    });
+
+    wordStrips.forEach((wordStrip) => wordStrip.initialize());
+
     // path = new Path();
     // const pathResolution = 20;
     // const angleStep = p.TWO_PI / pathResolution;
@@ -53,7 +101,6 @@ let sketch = (p) => {
     //   const point = p.createVector(pointX, pointY);
     //   path.addPoint(point);
     // }
-
     // for (let i = 0; i < wordBallCount; i++) {
     //   const wordBall = new WordBall({
     //     p,
@@ -65,7 +112,6 @@ let sketch = (p) => {
     //   });
     //   wordBalls.push(wordBall);
     // }
-
     // const id = sortedIds[2];
     // const speechBubble = new SpeechBubble({
     //   p,
@@ -77,23 +123,21 @@ let sketch = (p) => {
     // });
     // speechBubbles.push(speechBubble);
     // speechBubbleMap[id] = speechBubble;
-
-    sortedIds.forEach((id, index) => {
-      const speechBubble = new SpeechBubble({
-        p,
-        id,
-        index,
-        visibleBubbleCount,
-        speechBubbleMap,
-        displayAudioBubble: false,
-      });
-      speechBubbles.push(speechBubble);
-      speechBubbleMap[id] = speechBubble;
-    });
-
-    speechBubbles.forEach((speechBubble) => {
-      speechBubble.initialize(p);
-    });
+    // sortedIds.forEach((id, index) => {
+    //   const speechBubble = new SpeechBubble({
+    //     p,
+    //     id,
+    //     index,
+    //     visibleBubbleCount,
+    //     speechBubbleMap,
+    //     displayAudioBubble: false,
+    //   });
+    //   speechBubbles.push(speechBubble);
+    //   speechBubbleMap[id] = speechBubble;
+    // });
+    // speechBubbles.forEach((speechBubble) => {
+    //   speechBubble.initialize(p);
+    // });
   };
 
   p.draw = function () {
@@ -106,19 +150,38 @@ let sketch = (p) => {
     p.textSize(32);
     p.text(p.round(p.frameRate()), 10, 30);
 
-    speechBubbles.forEach((speechBubble) => {
-      speechBubble.draw(p);
+    wordStrips.forEach((wordStrip) => {
+      wordStrip.draw(p);
     });
 
-    wordBalls.forEach((wordBall) => {
-      wordBall.behaviors({ p, wordBalls });
-      wordBall.update(p);
-    });
+    // let xPos = 0;
+    // let interval = setInterval(() => {
+    //   document.getElementById("app__canvas").scroll({
+    //     top: 0,
+    //     left: xPos,
+    //     behavior: "auto",
+    //   });
+    //   xPos += 1;
+    // }, 100);
+
+    // speechBubbles.forEach((speechBubble) => {
+    //   speechBubble.draw(p);
+    // });
+
+    // wordBalls.forEach((wordBall) => {
+    //   wordBall.behaviors({ p, wordBalls });
+    //   wordBall.update(p);
+    // });
 
     // path.draw(p);
     // wordBalls.forEach((wordBall) => {
     //   wordBall.draw(p);
     // });
+
+    if (SAVE_PHOTO) {
+      p.noLoop();
+      p.save(`audio-visualization-${Date.now()}.png`);
+    }
   };
 };
 

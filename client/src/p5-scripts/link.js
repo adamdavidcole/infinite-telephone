@@ -30,6 +30,8 @@ export default class Link {
     const offsetJitter = p.map(p.sin(this.xOff), -1, 1, -25, 25);
     this.offsetY = offsetJitter;
 
+    // p.stroke(255);
+
     p.beginShape();
     // for (int i = 0; i < num; i++) {
     p.curveVertex(this.start.x, this.start.y);

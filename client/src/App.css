@@ -1,3 +1,7 @@
+#app__canvas {
+  overflow: scroll;
+}
+
 .App {
   text-align: center;
 }

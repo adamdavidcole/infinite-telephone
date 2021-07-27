@@ -77,6 +77,20 @@ function App() {
     p5Ref.current = new p5(sketch, processingRef.current);
   }, []);
 
+  // useEffect(() => {
+  //   if (processingRef.current) {
+  //     let xPos = 0;
+  //     let interval = setInterval(() => {
+  //       processingRef.current.scroll({
+  //         top: 0,
+  //         left: xPos,
+  //         behavior: "auto",
+  //       });
+  //       xPos += 1;
+  //     }, 80);
+  //   }
+  // }, [processingRef]);
+
   function startRecording() {
     audioRecorderRef.current.start();
     audioTranscription.current.start();
