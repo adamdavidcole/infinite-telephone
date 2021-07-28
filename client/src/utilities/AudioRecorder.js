@@ -26,17 +26,19 @@ class AudioRecorder {
     const blob = new Blob(this.chunks, { type: "audio/ogg; codecs=opus" });
     const audioURL = window.URL.createObjectURL(blob);
 
-    const a = document.createElement("a");
-    a.style.display = "none";
-    a.href = audioURL;
-    a.download = `test-${Date.now()}.ogg`;
-    document.body.appendChild(a);
-    a.click();
+    return audioURL;
 
-    setTimeout(() => {
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(audioURL);
-    }, 100);
+    // const a = document.createElement("a");
+    // a.style.display = "none";
+    // a.href = audioURL;
+    // a.download = `test-${Date.now()}.ogg`;
+    // document.body.appendChild(a);
+    // a.click();
+
+    // setTimeout(() => {
+    //   document.body.removeChild(a);
+    //   window.URL.revokeObjectURL(audioURL);
+    // }, 100);
   }
 
   onSuccess(stream) {
@@ -66,7 +68,6 @@ class AudioRecorder {
   }
 
   start() {
-    console.log("Audio recording started");
     this.chunks = [];
     this.mediaRecorder.start();
 
@@ -74,10 +75,17 @@ class AudioRecorder {
   }
 
   stop() {
-    console.log("Audio recording stopped");
     this.mediaRecorder.stop();
 
+    const blob = new Blob(this.chunks, { type: "audio/ogg; codecs=opus" });
+    const audioURL = window.URL.createObjectURL(blob);
+
     this.setIsRecording(false);
+  }
+
+  getMostRecentAudioBlob() {
+    const blob = new Blob(this.chunks, { type: "audio/ogg; codecs=opus" });
+    return blob;
   }
 }
 

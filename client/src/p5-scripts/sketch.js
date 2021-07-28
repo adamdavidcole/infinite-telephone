@@ -154,16 +154,6 @@ let sketch = (p) => {
       wordStrip.draw(p);
     });
 
-    // let xPos = 0;
-    // let interval = setInterval(() => {
-    //   document.getElementById("app__canvas").scroll({
-    //     top: 0,
-    //     left: xPos,
-    //     behavior: "auto",
-    //   });
-    //   xPos += 1;
-    // }, 100);
-
     // speechBubbles.forEach((speechBubble) => {
     //   speechBubble.draw(p);
     // });
