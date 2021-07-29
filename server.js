@@ -7,7 +7,7 @@ import { getData, initialize, addDataEntry } from "./data/data-manager.js";
 // SERVER SETUP
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "client/public/media/audio");
+    cb(null, "files");
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
@@ -25,6 +25,8 @@ app.use(
     extended: true,
   })
 );
+
+app.use(express.static("files"));
 
 // This displays message that the server running and listening to specified port
 app.listen(port, () => console.log(`Listening on port ${port}`));

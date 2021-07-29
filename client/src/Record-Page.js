@@ -63,7 +63,7 @@ export default function RecordPage() {
       transitionToNextState();
     }
 
-    const audioUrl = `/media/audio/${mostRecentAudioFilename}`;
+    const audioUrl = `${mostRecentAudioFilename}`;
     var a = new Audio(audioUrl);
     a.onended = stopPlayingAudio;
 
