@@ -27,6 +27,7 @@ app.use(
 );
 
 app.use(express.static("files"));
+app.use(express.static("data"));
 
 // This displays message that the server running and listening to specified port
 app.listen(port, () => console.log(`Listening on port ${port}`));
