@@ -80,6 +80,10 @@ button {
   height: 100%;
 }
 
+.p-record_page__hidden_audio {
+  // display: none;
+}
+
 .p-record_page_header {
   margin: 60px 20px 40px 20px;
   text-shadow: 2px 2px #ce2b2b;
@@ -106,7 +110,6 @@ button {
 .p-record_page_instructions ol li {
   margin-bottom: 10px;
 }
-
 
 .p-record_page_content {
   margin: 0 20px 0 20px;
@@ -144,4 +147,27 @@ button {
   100% {
 		box-shadow: 0 0 10px #ccc;
 	}
+}
+
+/* ----------- iPhone X ----------- */
+
+/* Portrait and Landscape */
+@media only screen and (max-device-width: 500px) { 
+    .p-record_page_header {
+      margin-top: 20px;
+    }
+
+    .p-record_page_header h1 {
+      font-size: 40px;
+    }
+
+    .p-record_page_instructions {
+      max-width: unset;
+      margin: 0 40px 20px 40px;
+    }
+
+    .p-record_page_content {
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
 }

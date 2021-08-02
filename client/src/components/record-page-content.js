@@ -16,7 +16,7 @@ function RestingContent({
   shadowRGB,
 }) {
   function onBeginClick() {
-    playMostRecentAudio();
+    setTimeout(playMostRecentAudio, 100);
     transitionToNextState();
   }
 

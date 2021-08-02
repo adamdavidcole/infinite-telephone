@@ -20,9 +20,9 @@ export default function RecordPage() {
   const [data, setData] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const audioRef = useRef();
   const [headerShadowHue, setHeaderShadowHue] = useState(0);
 
-  const audioPlayerRef = useRef();
   const audioRecorderRef = useRef(new AudioRecorder({ setIsRecording }));
 
   function transitionToNextState() {
@@ -67,29 +67,32 @@ export default function RecordPage() {
     [data]
   );
 
-  function playMostRecentAudio() {
+  function getMostRecentAudioFile() {
     const mostRecentRecording = last(data);
     const mostRecentAudioFilename = mostRecentRecording?.filename;
 
-    if (!mostRecentAudioFilename) {
+    return mostRecentAudioFilename;
+  }
+
+  function playMostRecentAudio() {
+    const mostRecentAudioFilename = getMostRecentAudioFile();
+    if (!mostRecentAudioFilename || !audioRef.current) {
       transitionToNextState();
     }
 
-    const audioUrl = `${mostRecentAudioFilename}`;
-    var a = new Audio(audioUrl);
-    a.onended = stopPlayingAudio;
+    console.log("playMostRecentAudio", mostRecentAudioFilename);
+    console.log("audioRef.current", audioRef.current);
 
-    audioPlayerRef.current = a;
+    audioRef.current.onended = stopPlayingAudio;
+    audioRef.current.play();
 
-    a.play();
     setIsPlayingAudio(true);
   }
 
   function stopPlayingAudio() {
-    if (!audioPlayerRef.current) return;
+    if (!audioRef.current) return;
 
-    audioPlayerRef.current.pause();
-
+    audioRef.current.pause();
     setIsPlayingAudio(false);
 
     transitionToNextState();
@@ -129,7 +132,15 @@ export default function RecordPage() {
         stopRecording={stopRecording}
         shadowRGB={getRGB()}
       />
-      <br />
+      <button onClick={() => console.log("fake click")}>Fake button</button>
+      <audio
+        className="p-record_page__hidden_audio"
+        const
+        ref={audioRef}
+        src={getMostRecentAudioFile()}
+        controls
+        preload="none"
+      />
     </div>
   );
 }
