@@ -3,7 +3,8 @@ import React from "react";
 import VisualizationPage from "./Visualization-Page";
 import RecordPage from "./Record-Page.js";
 
-import "./App.css";
+import "modern-normalize/modern-normalize.css";
+import "./App.scss";
 
 function showRecordPage() {
   const pathname = window.location.pathname;

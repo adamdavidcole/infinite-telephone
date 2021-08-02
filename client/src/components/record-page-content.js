@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import useInterval from "../utilities/use-interval";
 import { RECORD_STATES } from "../utilities/state-manager";
 
 //   export const RECORD_STATES = {
@@ -9,28 +10,20 @@ import { RECORD_STATES } from "../utilities/state-manager";
 //     RECORDING_COMPLETE: "RECORDING_COMPLETE",
 //   };
 
-function useInterval(callback, delay) {
-  const savedCallback = useRef();
-
-  useEffect(() => {
-    savedCallback.current = callback;
-  });
-
-  useEffect(() => {
-    function tick() {
-      savedCallback.current();
-    }
-
-    let id = setInterval(tick, delay);
-    return () => clearInterval(id);
-  }, [delay]);
-}
-
-function RestingContent({ playMostRecentAudio, transitionToNextState }) {
+function RestingContent({
+  playMostRecentAudio,
+  transitionToNextState,
+  shadowRGB,
+}) {
   function onBeginClick() {
     playMostRecentAudio();
     transitionToNextState();
   }
+
+  const buttonStyle = {
+    boxShadow: `0 0 30px ${shadowRGB}`,
+    // background: shadowRGB,
+  };
 
   return (
     <button type="button" onClick={onBeginClick}>
@@ -44,19 +37,15 @@ function ListenContent({}) {
 }
 
 function PreRecordingContent({ transitionToNextState }) {
-  const [countdown, setCountdown] = useState(5);
+  const onDoneClicked = useCallback(() => {
+    transitionToNextState();
+  }, [transitionToNextState]);
 
-  useInterval(() => {
-    if (countdown > 0) {
-      setCountdown(countdown - 1);
-    }
-  }, 1000);
-
-  useEffect(() => {
-    if (countdown === 0) transitionToNextState();
-  }, [countdown, transitionToNextState]);
-
-  return <div>Recording will begin in {countdown} seconds</div>;
+  return (
+    <div>
+      <button onClick={onDoneClicked}>Begin recording</button>
+    </div>
+  );
 }
 
 function RecordingContent({
@@ -64,7 +53,7 @@ function RecordingContent({
   stopRecording,
   transitionToNextState,
 }) {
-  const [countdown, setCountdown] = useState(4);
+  const [countdown, setCountdown] = useState(65);
 
   useInterval(() => {
     if (countdown > 0) {
@@ -89,17 +78,17 @@ function RecordingContent({
   }
 
   return (
-    <div>
-      <span>
+    <>
+      <div>
         Recording time remaining: <strong>{countdown} seconds</strong>
-      </span>
+      </div>
       <button onClick={onDoneClicked}>Done recording</button>
-    </div>
+    </>
   );
 }
 
 function RecordingCompleteContent({ transitionToNextState }) {
-  const [countdown, setCountdown] = useState(10);
+  const [countdown, setCountdown] = useState(60);
 
   useInterval(() => {
     if (countdown > 0) {
@@ -113,9 +102,13 @@ function RecordingCompleteContent({ transitionToNextState }) {
     }
   }, [countdown, transitionToNextState]);
 
+  const onDoneClicked = useCallback(() => {
+    transitionToNextState();
+  }, [transitionToNextState]);
+
   return (
     <div>
-      Session will end in <strong>{countdown} seconds</strong>
+      <button onClick={onDoneClicked}>Finished</button>
     </div>
   );
 }
@@ -126,41 +119,52 @@ export default function RecordPageContent({
   startRecording,
   stopRecording,
   transitionToNextState,
+  shadowRGB,
 }) {
+  let recordPageContent = null;
+
   switch (stateValue) {
     case RECORD_STATES.RESTING:
-      return (
+      recordPageContent = (
         <RestingContent
           playMostRecentAudio={playMostRecentAudio}
           transitionToNextState={transitionToNextState}
+          shadowRGB={shadowRGB}
         />
       );
+      break;
 
     case RECORD_STATES.LISTEN:
-      return <ListenContent />;
+      recordPageContent = <ListenContent />;
+      break;
 
     case RECORD_STATES.PRE_RECORDING:
-      return (
+      recordPageContent = (
         <PreRecordingContent transitionToNextState={transitionToNextState} />
       );
+      break;
 
     case RECORD_STATES.RECORDING:
-      return (
+      recordPageContent = (
         <RecordingContent
           startRecording={startRecording}
           stopRecording={stopRecording}
           transitionToNextState={transitionToNextState}
         />
       );
+      break;
 
     case RECORD_STATES.RECORDING_COMPLETE:
-      return (
+      recordPageContent = (
         <RecordingCompleteContent
           transitionToNextState={transitionToNextState}
         />
       );
+      break;
 
     default:
       return null;
   }
+
+  return <div className="p-record_page_content">{recordPageContent}</div>;
 }

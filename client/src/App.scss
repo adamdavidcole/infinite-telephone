@@ -1,0 +1,147 @@
+/**
+NAH
+Vandar Poel's Blue: 100, 73, 43, 10: #003E83
+Yellow orange: 0 45 100 0:#FF8C00
+Sulpher Yellow: 4 4 28 0:#DFDFA7
+**/
+$backgroundColor: #003E83;
+$textColor: #DFDFA7;
+$buttonColor: #FF8C00;
+$buttonTextColor:$textColor; 
+
+/**
+PASS
+Raw Sienna: 18 58 100 12: #B85E00
+Deep Lyons Blue: 100,85,15,6: #0024CC
+Apricot Yellow: 0,10,100,0: #FFE600
+Benzol Green: 100,15,55,0: #00D973
+**/
+$backgroundColor: #00D973;
+$textColor: #0024CC;
+$buttonColor: #FFE600;
+$buttonTextColor: #0024CC; 
+
+/**
+Maybe
+Deep slate green: 80,50,60,70: #0F261F
+Seashell pink: 0,19,23,0: #FFCFC4
+**/
+$backgroundColor: #0F261F;
+$textColor: #FFCFC4;
+$buttonColor: #FFCFC4;
+$buttonTextColor: #0F261F; 
+
+/**
+NAH
+Vandar Poel's Blue: 100, 73, 43, 10: #003E83
+Pale Kings Blue: 33,4,7,0: #ABF5ED
+Ecru: 20,25,40,6: #C0B490
+**/
+$backgroundColor: #003E83;
+$textColor: #C0B490;
+$buttonColor: #ABF5ED;
+$buttonTextColor:$textColor; 
+
+/**
+Black/Seashell
+**/
+$backgroundColor: #111111;
+$textColor: #eedad6;
+$buttonColor: $textColor;
+$buttonTextColor: $backgroundColor; 
+
+html, body, #root {
+  height: 100%;
+}
+
+#app__canvas {
+  overflow: scroll;
+}
+
+body {
+  font-family: 'Exo 2', sans-serif;
+}
+
+/* Dark blue, light yellow, orange */
+body {
+  background-color: $backgroundColor;
+  color: $textColor;
+}
+
+button {
+  background-color: $buttonColor;
+  color:$buttonTextColor;
+}
+
+.p-record_page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.p-record_page_header {
+  margin: 60px 20px 40px 20px;
+  text-shadow: 2px 2px #ce2b2b;
+}
+
+.p-record_page_header h1 {
+  margin: 0;
+  font-size: 60px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.p-record_page_instructions {
+  margin: 0 20px 20px 20px;
+  max-width: 66%;
+  font-size: 19px;
+  line-height: 26px;
+}
+
+.p-record_page_instructions ol {
+  margin: 15px 0;
+}
+
+.p-record_page_instructions ol li {
+  margin-bottom: 10px;
+}
+
+
+.p-record_page_content {
+  margin: 0 20px 0 20px;
+  padding: 20px;
+  flex-grow: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.p-record_page_content button {
+  cursor: pointer;
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  border: none;
+  box-shadow: 0 0 20px #ccc;
+  animation: pulse 3s infinite ease-in-out;
+
+  font-size: 19px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+@keyframes pulse {
+	0% {
+		box-shadow: 0 0 10px #ccc;
+	}
+
+	50% {
+		box-shadow: 0 0 40px #ccc;
+	}
+
+  100% {
+		box-shadow: 0 0 10px #ccc;
+	}
+}

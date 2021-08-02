@@ -10,45 +10,65 @@ import { RECORD_STATES } from "../utilities/state-manager";
 //   };
 
 export default function RecordPageInstructions({ stateValue }) {
+  let instructionsContent = null;
   switch (stateValue) {
     case RECORD_STATES.RESTING:
-      return (
+      instructionsContent = (
         <div>
-          Welcome. To join the conversation you will: <br /> 1. Listen to the
-          what the previous participant had to share <br /> 2. Take a breath to
-          collect your thoughts <br /> 3. Join the conversation by adding your
-          response: it can be whatever comes to mind, a direct answer the
-          previous message, a thought that passed through your mind while
-          listening, whatever! The only requirement is that you please be
-          respectful.
+          <strong>WELCOME.</strong> To join the conversation please:
+          <ol>
+            <li>
+              Press <strong>START</strong> to listen to the what the last person
+              added to the conversation
+            </li>
+            <li>
+              Take a <i>breath</i> to collect your thoughts
+            </li>
+            <li>
+              Press <strong>BEGIN RECORDING</strong> to join the conversation by
+              adding your response. It can be whatever comes to mind, a direct
+              answer to the previous message, a thought that passed through your
+              mind while listening, anything at all!
+            </li>
+          </ol>
+          The only requirement is that you <strong>please be respectful</strong>
+          .
         </div>
       );
+      break;
     case RECORD_STATES.LISTEN:
-      return (
+      instructionsContent = (
         <div>
           Please listen. You will be asked to add your voice to the conversation
           when this message is complete.
         </div>
       );
+      break;
     case RECORD_STATES.PRE_RECORDING:
-      return (
+      instructionsContent = (
         <div>
-          Take a few seconds to collect your thoughts. Your chance to join the
-          conversation will begin in a few moments. Please, wait for the tone to
-          begin your message.
+          Take a few seconds to collect your thoughts. When you are ready to
+          join the conversation press <strong>BEGIN RECORDING</strong>.
         </div>
       );
+      break;
     case RECORD_STATES.RECORDING:
-      return <div>Your response is being recorded</div>;
+      instructionsContent = <div>Your response is being recorded</div>;
+      break;
     case RECORD_STATES.RECORDING_COMPLETE:
-      return (
+      instructionsContent = (
         <div>
           You can follow the results of this experiment on instagram by
           following @this.is.not.a.gram
         </div>
       );
+      break;
 
     default:
       return null;
   }
+
+  return (
+    <div className="p-record_page_instructions">{instructionsContent}</div>
+  );
 }

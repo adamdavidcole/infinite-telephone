@@ -6,6 +6,8 @@ import {
   addDataEntryAPI,
   uploadFileAPI,
 } from "./fetchers/fetchers";
+import hslToRgb from "./utilities/hsl-to-rgb";
+import useInterval from "./utilities/use-interval";
 import AudioRecorder from "./utilities/AudioRecorder";
 import stateManager, { RECORD_TRANSITIONS } from "./utilities/state-manager";
 
@@ -18,6 +20,7 @@ export default function RecordPage() {
   const [data, setData] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [headerShadowHue, setHeaderShadowHue] = useState(0);
 
   const audioPlayerRef = useRef();
   const audioRecorderRef = useRef(new AudioRecorder({ setIsRecording }));
@@ -25,6 +28,15 @@ export default function RecordPage() {
   function transitionToNextState() {
     stateManager.transition(stateManager.value, RECORD_TRANSITIONS.NEXT);
     setCurrentState(stateManager.value);
+  }
+
+  useInterval(() => {
+    setHeaderShadowHue((headerShadowHue + 1) % 360);
+  }, 50);
+
+  function getRGB() {
+    const [r, g, b] = hslToRgb(headerShadowHue / 360, 1, 0.5);
+    return "rgb(" + r + "," + g + "," + b + ")";
   }
 
   // Effects
@@ -106,8 +118,8 @@ export default function RecordPage() {
   }, [onFileUploadSuccess]);
 
   return (
-    <div>
-      <RecordPageHeader stateValue={currentState} />
+    <div className="p-record_page">
+      <RecordPageHeader stateValue={currentState} shadowRGB={getRGB()} />
       <RecordPageInstructions stateValue={currentState} />
       <RecordPageContent
         stateValue={stateManager.value}
@@ -115,6 +127,7 @@ export default function RecordPage() {
         transitionToNextState={transitionToNextState}
         startRecording={startRecording}
         stopRecording={stopRecording}
+        shadowRGB={getRGB()}
       />
       <br />
     </div>
