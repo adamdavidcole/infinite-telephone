@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "node-sass": "^6.0.1",
     "sass-loader": "^10.1.1"
   },
   "dependencies": {
@@ -12,6 +11,7 @@
     "@testing-library/user-event": "^12.1.10",
     "lodash": "^4.17.21",
     "modern-normalize": "^1.1.0",
+    "node-sass": "^6.0.1",
     "p5": "^1.4.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
