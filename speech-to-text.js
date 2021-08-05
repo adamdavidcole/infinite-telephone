@@ -1,5 +1,5 @@
 import fs from "fs";
-import { last } from "lodash";
+import _ from "lodash";
 import SpeechToTextV1 from "ibm-watson/speech-to-text/v1.js";
 import { IamAuthenticator } from "ibm-watson/auth/index.js";
 
@@ -23,11 +23,11 @@ function initialize() {
 function callSpeechToTextAPI(filename) {
   if (!speechToText) initialize();
 
-  const fileExtension = last(filename?.split("."));
+  const fileExtension = _.last(filename?.split("."));
   const contentType = CONTENT_TYPES[fileExtension];
 
   const recognizeParams = {
-    audio: fs.createReadStream(filename),
+    audio: fs.createReadStream(`./files/${filename}`),
     contentType,
   };
 
@@ -45,9 +45,7 @@ function callSpeechToTextAPI(filename) {
     });
 }
 
-function getTranscriptForFile(filename) {
+export default function getTranscriptForFile(filename) {
   console.log(`getting transcript for ${filename}`);
   return callSpeechToTextAPI(filename);
 }
-
-export default getTranscript;

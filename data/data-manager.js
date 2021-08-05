@@ -1,6 +1,9 @@
 import { Low, JSONFile } from "lowdb";
 import path, { join } from "path";
 import ffmpeg from "fluent-ffmpeg";
+import _ from "lodash";
+
+import getTranscriptForFile from "../speech-to-text.js";
 
 const __dirname = path.resolve();
 
@@ -13,13 +16,16 @@ export async function initialize() {
   await db.read();
 }
 
-export function getData() {
+export async function getData() {
+  await db.read();
   return db.data;
 }
 
 export async function addDataEntry(dataEntry) {
-  db.data.push(dataEntry);
-  console.log("db.data update", db.data);
+  const data = await getData();
+  data.push(dataEntry);
+
+  console.log("db.data update", data);
   await db.write();
 
   processDataEntry(dataEntry);
@@ -45,6 +51,38 @@ function convert(input, output, callback) {
     .run();
 }
 
+async function handleTranscriptForDataEntry({ dataEntry, transcript }) {
+  const { timestamp } = dataEntry;
+  console.log(
+    "Saving transcript for dataEntry: ",
+    timestamp,
+    "; transcript:",
+    transcript
+  );
+
+  const data = await getData();
+
+  const existingDataEntryIndex = _.findIndex(
+    data,
+    (entry) => entry.timestamp === timestamp
+  );
+  if (_.isUndefined(existingDataEntryIndex)) {
+    console.error("Cannot find data entry for ", timestamp);
+    return;
+  }
+
+  const existingDataEntry = data[existingDataEntryIndex];
+  const nextDataEntry = {
+    ...existingDataEntry,
+    transcript,
+  };
+
+  data[existingDataEntryIndex] = nextDataEntry;
+  await db.write();
+
+  console.log("DB update for dataEntry", timestamp);
+}
+
 function processDataEntry(dataEntry) {
   const { filename } = dataEntry;
   const mp3Filename = `${filename.split(".")[0]}.mp3`;
@@ -53,8 +91,14 @@ function processDataEntry(dataEntry) {
     convert(`./files/${filename}`, `./files/${mp3Filename}`, (err) => {
       if (!err) {
         console.log("conversion complete");
-        //...
+        getTranscriptForFile(mp3Filename).then((transcript) => {
+          handleTranscriptForDataEntry({ dataEntry, transcript });
+        });
       }
+    });
+  } else {
+    getTranscriptForFile(mp3Filename).then((transcript) => {
+      handleTranscriptForDataEntry({ dataEntry, transcript });
     });
   }
 }

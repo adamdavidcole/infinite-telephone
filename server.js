@@ -41,8 +41,8 @@ app.get("/express_backend", (req, res) => {
   res.send({ express: "YOUR EXPRESS BACKEND IS CONNECTED TO REACT" });
 });
 
-app.get("/get_initial_data", (req, res) => {
-  const data = getData();
+app.get("/get_initial_data", async (req, res) => {
+  const data = await getData();
   res.send({ data });
 });
 
@@ -71,4 +71,4 @@ app.post(
 
 // DATABASE INITIALIZATION
 await initialize();
-console.log("data update", getData());
+console.log("data update", await getData());
