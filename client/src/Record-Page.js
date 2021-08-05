@@ -15,6 +15,12 @@ import RecordPageHeader from "./components/record-page-header";
 import RecordPageInstructions from "./components/record-page-instructions";
 import RecordPageContent from "./components/record-page-content";
 
+const AUDIO_FILE_TYPES = {
+  webm: "audio/webm;codecs=opus",
+  ogg: "audio/ogg;codecs=opus",
+  mp3: "audio/mpeg",
+};
+
 export default function RecordPage() {
   const [currentState, setCurrentState] = useState(stateManager.value);
   const [data, setData] = useState(null);
@@ -110,15 +116,26 @@ export default function RecordPage() {
 
     setTimeout(() => {
       const blob = audioRecorderRef.current.getMostRecentAudioBlob();
+      const fileExtension = audioRecorderRef.current.getFileExtension();
 
       const timestamp = Date.now();
-      const filename = `audio-recording-${timestamp}.ogg`;
+      const filename = `audio-recording-${timestamp}.${fileExtension}`;
 
-      uploadFileAPI({ blob, filename }).then(() => {
-        onFileUploadSuccess({ filename, timestamp });
-      });
+      console.log(`Uploading ${filename}`);
+      uploadFileAPI({ blob, filename })
+        .then(() => {
+          console.log(`Uploading ${filename} SUCCESS`);
+          onFileUploadSuccess({ filename, timestamp });
+        })
+        .catch((e) => {
+          console.log(`Uploading ${filename} FAILED`, e);
+        });
     }, 1000);
   }, [onFileUploadSuccess]);
+
+  const audioFilename = getMostRecentAudioFile();
+  // const audioFileExtension = audioFilename?.split(".")[1];
+  const audioFilenameAsMp3 = `${audioFilename?.split(".")[0]}.mp3`;
 
   return (
     <div className="p-record_page">
@@ -132,15 +149,14 @@ export default function RecordPage() {
         stopRecording={stopRecording}
         shadowRGB={getRGB()}
       />
-      <button onClick={() => console.log("fake click")}>Fake button</button>
+
       <audio
-        className="p-record_page__hidden_audio"
-        const
-        ref={audioRef}
-        src={getMostRecentAudioFile()}
         controls
+        className="p-record_page__hidden_audio"
+        ref={audioRef}
         preload="none"
-      />
+        src={audioFilenameAsMp3}
+      ></audio>
     </div>
   );
 }

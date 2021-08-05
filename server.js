@@ -1,8 +1,11 @@
 import express from "express";
 import multer from "multer";
 import path, { join } from "path";
+import dotenv from "dotenv";
 
 import { getData, initialize, addDataEntry } from "./data/data-manager.js";
+
+dotenv.config();
 
 // SERVER SETUP
 var storage = multer.diskStorage({

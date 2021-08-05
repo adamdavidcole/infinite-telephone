@@ -16,12 +16,41 @@ class AudioRecorder {
     this.onMediaRecorderStop = this.onMediaRecorderStop.bind(this);
   }
 
+  getMimeType() {
+    if (MediaRecorder.isTypeSupported("audio/webm;codecs=opus")) {
+      return "audio/webm;codecs=opus";
+    }
+    if (MediaRecorder.isTypeSupported("audio/ogg;codecs=opus")) {
+      return "audio/ogg;codecs=opus";
+    }
+    if (MediaRecorder.isTypeSupported("audio/mp4")) {
+      return "audio/mp4";
+    }
+  }
+
+  getFileExtension() {
+    if (!this.mediaRecorder) return "";
+
+    switch (this.mediaRecorder.mimeType) {
+      case "audio/webm;codecs=opus":
+        return "webm";
+      case "audio/ogg;codecs=opus":
+        return "ogg";
+      case "audio/mp4":
+        return "mp3";
+      default:
+        return "";
+    }
+  }
+
   onMediaRecorderDataAvailable(e) {
     this.chunks.push(e.data);
   }
 
   onMediaRecorderStop(e) {
     if (!this.shouldDownloadAudio) return;
+
+    console.log("mediaRecorder");
 
     const blob = new Blob(this.chunks, { type: "audio/ogg; codecs=opus" });
     const audioURL = window.URL.createObjectURL(blob);
@@ -42,7 +71,13 @@ class AudioRecorder {
   }
 
   onSuccess(stream) {
-    this.mediaRecorder = new MediaRecorder(stream);
+    const mimeType = this.getMimeType();
+    this.mediaRecorder = new MediaRecorder(stream, { mimeType });
+
+    console.log(
+      "Created a media recorder with mimetype:",
+      this.mediaRecorder.mimeType
+    );
 
     this.mediaRecorder.ondataavailable = this.onMediaRecorderDataAvailable;
     this.mediaRecorder.onstop = this.onMediaRecorderStop;
@@ -77,14 +112,14 @@ class AudioRecorder {
   stop() {
     this.mediaRecorder.stop();
 
-    const blob = new Blob(this.chunks, { type: "audio/ogg; codecs=opus" });
-    const audioURL = window.URL.createObjectURL(blob);
+    // const blob = new Blob(this.chunks, { type: this.mediaRecorder.mimeType });
+    // const audioURL = window.URL.createObjectURL(blob);
 
     this.setIsRecording(false);
   }
 
   getMostRecentAudioBlob() {
-    const blob = new Blob(this.chunks, { type: "audio/ogg; codecs=opus" });
+    const blob = new Blob(this.chunks, { type: this.mediaRecorder.mimeType });
     return blob;
   }
 }
