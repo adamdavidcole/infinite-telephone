@@ -23,7 +23,6 @@ export default class AudioRing {
 
   draw(p) {
     const vol = this.amplitude ? this.amplitude.getLevel() : 0;
-    console.log("vol", vol);
     const volAvg = this.getRollingAverageAmp();
 
     const ampIndex = p.frameCount % 200;

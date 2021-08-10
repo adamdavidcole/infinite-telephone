@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import p5 from "p5";
-import "p5/lib/addons/p5.sound";
+// import * as P5 from "p5";
+// import "p5/lib/addons/p5.sound";
+
+// window.p5 = P5; // I need this otherwise it throws an error
+// eslint-disable import/first
 
 import audioVisualizerSketch from "../p5-scripts/audio-visualizer-sketch";
 import useInterval from "../utilities/use-interval";
@@ -40,7 +43,7 @@ function ListenContent({ audioFilenameAsMp3, onAudioEnded }) {
   const processingRef = useRef();
 
   useEffect(() => {
-    new p5(
+    new window.p5(
       (p) =>
         audioVisualizerSketch(p, {
           audioFilenameAsMp3,
@@ -104,14 +107,14 @@ function RecordingContent({
 
     const height = processingRef.current.clientHeight;
 
-    new p5(
-      (p) =>
-        audioVisualizerSketch(p, {
-          useMicAsSource: true,
-          height,
-        }),
-      processingRef.current
-    );
+    // new P5(
+    //   (p) =>
+    //     audioVisualizerSketch(p, {
+    //       useMicAsSource: true,
+    //       height,
+    //     }),
+    //   processingRef.current
+    // );
   }, []);
 
   const progressDecimal = (recordingDuration - countdown) / recordingDuration;
