@@ -81,7 +81,7 @@ button {
 }
 
 .p-record_page__hidden_audio {
-  // display: none;
+  display: none;
 }
 
 .p-record_page_header {
@@ -111,6 +111,10 @@ button {
   margin-bottom: 10px;
 }
 
+.p-record_page_instructions__pre_recording {
+  text-align: center;
+}
+
 .p-record_page_content {
   margin: 0 20px 0 20px;
   padding: 20px;
@@ -118,7 +122,9 @@ button {
 
   display: flex;
   align-items: center;
-  justify-content: center;
+  // justify-content: center;
+
+  flex-direction: column;
 }
 
 .p-record_page_content button {
@@ -135,6 +141,32 @@ button {
   font-weight: 700;
 }
 
+.p-record_page_content button.p_recording_content__done_recording {
+  position: relative;
+  height: 50px;
+  width: 250px;
+  border-radius: 4px;
+}
+
+.p_recording_content__done_recording_progress {
+  position: absolute;
+  left: 0;
+  top: 40px;
+  height: 10px;
+  background: lightcyan;
+  width: 0%;
+  transition: width 1s linear;
+  border-radius: 0 0 4px 4px;
+  display: none;
+}
+
+.p_recording_content__done_recording_text {
+  position: absolute;
+  width: 100%;
+  top: 14px;
+  left: 0;
+}
+
 @keyframes pulse {
 	0% {
 		box-shadow: 0 0 10px #ccc;
@@ -147,6 +179,31 @@ button {
   100% {
 		box-shadow: 0 0 10px #ccc;
 	}
+}
+
+#p_record_page_listen_content__canvas {
+  // position: absolute;
+  // top: 0;
+  // left: 0;
+  // width: 100%;
+  // height: 100%;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+  z-index: -1;
+  flex-grow: 1;
+}
+
+.p_recording_content__actions {
+  // align-self: flex-start;
+  margin-bottom: 50px;
+}
+
+.p_recording_content__actions_countdown {
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 20px;
+  text-transform: lowercase;
 }
 
 /* ----------- iPhone X ----------- */

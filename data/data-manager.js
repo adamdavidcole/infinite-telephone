@@ -7,6 +7,8 @@ import getTranscriptForFile from "../speech-to-text.js";
 
 const __dirname = path.resolve();
 
+const SHOULD_GET_TRANSCRIPT = false;
+
 const file = join(__dirname, "data/db.json");
 const adapter = new JSONFile(file);
 const db = new Low(adapter);
@@ -91,14 +93,18 @@ function processDataEntry(dataEntry) {
     convert(`./files/${filename}`, `./files/${mp3Filename}`, (err) => {
       if (!err) {
         console.log("conversion complete");
-        getTranscriptForFile(mp3Filename).then((transcript) => {
-          handleTranscriptForDataEntry({ dataEntry, transcript });
-        });
+        if (SHOULD_GET_TRANSCRIPT) {
+          getTranscriptForFile(mp3Filename).then((transcript) => {
+            handleTranscriptForDataEntry({ dataEntry, transcript });
+          });
+        }
       }
     });
   } else {
-    getTranscriptForFile(mp3Filename).then((transcript) => {
-      handleTranscriptForDataEntry({ dataEntry, transcript });
-    });
+    if (SHOULD_GET_TRANSCRIPT) {
+      getTranscriptForFile(mp3Filename).then((transcript) => {
+        handleTranscriptForDataEntry({ dataEntry, transcript });
+      });
+    }
   }
 }

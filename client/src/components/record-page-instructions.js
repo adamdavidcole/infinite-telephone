@@ -19,7 +19,7 @@ export default function RecordPageInstructions({ stateValue }) {
           <ol>
             <li>
               Press <strong>START</strong> to listen to the what the last person
-              added to the conversation
+              said
             </li>
             <li>
               Take a <i>breath</i> to collect your thoughts
@@ -28,7 +28,7 @@ export default function RecordPageInstructions({ stateValue }) {
               Press <strong>BEGIN RECORDING</strong> to join the conversation by
               adding your response. It can be whatever comes to mind, a direct
               answer to the previous message, a thought that passed through your
-              mind while listening, anything at all!
+              mind while listening, anything at all…
             </li>
           </ol>
           The only requirement is that you <strong>please be respectful</strong>
@@ -46,14 +46,22 @@ export default function RecordPageInstructions({ stateValue }) {
       break;
     case RECORD_STATES.PRE_RECORDING:
       instructionsContent = (
-        <div>
+        <div className="p-record_page_instructions__pre_recording">
           Take a few seconds to collect your thoughts. When you are ready to
           join the conversation press <strong>BEGIN RECORDING</strong>.
+          <br />
+          <br />
+          Your response can be up to <em>60 seconds</em> long.
         </div>
       );
       break;
     case RECORD_STATES.RECORDING:
-      instructionsContent = <div>Your response is being recorded</div>;
+      instructionsContent = (
+        <div>
+          Your response is being recorded. Click <strong>DONE RECORDING</strong>{" "}
+          when your message is complete.
+        </div>
+      );
       break;
     case RECORD_STATES.RECORDING_COMPLETE:
       instructionsContent = (

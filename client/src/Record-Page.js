@@ -80,10 +80,17 @@ export default function RecordPage() {
     return mostRecentAudioFilename;
   }
 
+  const onAudioEnded = useCallback(() => {
+    transitionToNextState();
+    setIsPlayingAudio(false);
+  }, []);
+
+  // MAYBE DELETE
   function playMostRecentAudio() {
     const mostRecentAudioFilename = getMostRecentAudioFile();
     if (!mostRecentAudioFilename || !audioRef.current) {
       transitionToNextState();
+      return;
     }
 
     console.log("playMostRecentAudio", mostRecentAudioFilename);
@@ -95,6 +102,7 @@ export default function RecordPage() {
     setIsPlayingAudio(true);
   }
 
+  // MAYBE DELETE
   function stopPlayingAudio() {
     if (!audioRef.current) return;
 
@@ -135,7 +143,9 @@ export default function RecordPage() {
 
   const audioFilename = getMostRecentAudioFile();
   // const audioFileExtension = audioFilename?.split(".")[1];
-  const audioFilenameAsMp3 = `${audioFilename?.split(".")[0]}.mp3`;
+  const audioFilenameAsMp3 = audioFilename
+    ? `${audioFilename?.split(".")[0]}.mp3`
+    : null;
 
   return (
     <div className="p-record_page">
@@ -147,16 +157,20 @@ export default function RecordPage() {
         transitionToNextState={transitionToNextState}
         startRecording={startRecording}
         stopRecording={stopRecording}
+        onAudioEnded={onAudioEnded}
+        audioFilenameAsMp3={audioFilenameAsMp3}
         shadowRGB={getRGB()}
       />
 
-      <audio
-        controls
-        className="p-record_page__hidden_audio"
-        ref={audioRef}
-        preload="none"
-        src={audioFilenameAsMp3}
-      ></audio>
+      {audioFilenameAsMp3 && (
+        <audio
+          controls
+          className="p-record_page__hidden_audio"
+          ref={audioRef}
+          preload="auto"
+          src={audioFilenameAsMp3}
+        ></audio>
+      )}
     </div>
   );
 }

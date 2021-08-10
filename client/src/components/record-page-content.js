@@ -1,5 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import p5 from "p5";
+import "p5/lib/addons/p5.sound";
+
+import audioVisualizerSketch from "../p5-scripts/audio-visualizer-sketch";
 import useInterval from "../utilities/use-interval";
+import lerpColor from "../utilities/lerp-color";
 import { RECORD_STATES } from "../utilities/state-manager";
 
 //   export const RECORD_STATES = {
@@ -16,7 +21,6 @@ function RestingContent({
   shadowRGB,
 }) {
   function onBeginClick() {
-    setTimeout(playMostRecentAudio, 100);
     transitionToNextState();
   }
 
@@ -32,8 +36,24 @@ function RestingContent({
   );
 }
 
-function ListenContent({}) {
-  return <div>Listening in progress...</div>;
+function ListenContent({ audioFilenameAsMp3, onAudioEnded }) {
+  const processingRef = useRef();
+
+  useEffect(() => {
+    new p5(
+      (p) =>
+        audioVisualizerSketch(p, {
+          audioFilenameAsMp3,
+          onAudioEnded,
+          height: processingRef.current.clientHeight,
+        }),
+      processingRef.current
+    );
+  }, [audioFilenameAsMp3, onAudioEnded]);
+
+  return (
+    <div id="p_record_page_listen_content__canvas" ref={processingRef}></div>
+  );
 }
 
 function PreRecordingContent({ transitionToNextState }) {
@@ -53,7 +73,9 @@ function RecordingContent({
   stopRecording,
   transitionToNextState,
 }) {
-  const [countdown, setCountdown] = useState(65);
+  const recordingDuration = 30;
+  const processingRef = useRef();
+  const [countdown, setCountdown] = useState(recordingDuration);
 
   useInterval(() => {
     if (countdown > 0) {
@@ -77,12 +99,60 @@ function RecordingContent({
     transitionToNextState();
   }
 
+  useEffect(() => {
+    if (!processingRef.current) return;
+
+    const height = processingRef.current.clientHeight;
+
+    new p5(
+      (p) =>
+        audioVisualizerSketch(p, {
+          useMicAsSource: true,
+          height,
+        }),
+      processingRef.current
+    );
+  }, []);
+
+  const progressDecimal = (recordingDuration - countdown) / recordingDuration;
+  const progressPercentage = progressDecimal * 100;
+
+  const lerpColorStart = "#2cba00";
+  const lerpColorMid = "#fff400";
+  const lerpColorEnd = "#ff0000";
+
+  let lerpedColor;
+  if (progressDecimal < 0.5) {
+    lerpedColor = lerpColor(lerpColorStart, lerpColorMid, progressDecimal * 2);
+  } else {
+    lerpedColor = lerpColor(
+      lerpColorMid,
+      lerpColorEnd,
+      (progressDecimal - 0.5) * 2
+    );
+  }
+
   return (
     <>
-      <div>
-        Recording time remaining: <strong>{countdown} seconds</strong>
+      <button
+        className="p_recording_content__done_recording"
+        onClick={onDoneClicked}
+      >
+        <div
+          className="p_recording_content__done_recording_progress"
+          style={{
+            width: `${progressPercentage}%`,
+            backgroundColor: lerpedColor,
+          }}
+        ></div>
+        <div className="p_recording_content__done_recording_text">
+          DONE RECORDING
+        </div>
+      </button>
+      <div className="p_recording_content__actions_countdown">
+        {countdown}s remaining…
       </div>
-      <button onClick={onDoneClicked}>Done recording</button>
+      <div id="p_record_page_listen_content__canvas" ref={processingRef}></div>
     </>
   );
 }
@@ -119,6 +189,8 @@ export default function RecordPageContent({
   startRecording,
   stopRecording,
   transitionToNextState,
+  audioFilenameAsMp3,
+  onAudioEnded,
   shadowRGB,
 }) {
   let recordPageContent = null;
@@ -135,7 +207,12 @@ export default function RecordPageContent({
       break;
 
     case RECORD_STATES.LISTEN:
-      recordPageContent = <ListenContent />;
+      recordPageContent = (
+        <ListenContent
+          audioFilenameAsMp3={audioFilenameAsMp3}
+          onAudioEnded={onAudioEnded}
+        />
+      );
       break;
 
     case RECORD_STATES.PRE_RECORDING:
