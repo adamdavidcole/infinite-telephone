@@ -47,6 +47,10 @@ let audioVisualizerSketch = (p, props) => {
   };
 
   p.setup = function () {
+    if (!useMicAsSource && !audioFilenameAsMp3) {
+      onAudioEnded();
+    }
+
     // if (!useMicAsSource && audioFilenameAsMp3) {
     //   song = new window.p5.SoundFile(audioFilenameAsMp3);
     // }
@@ -79,7 +83,7 @@ let audioVisualizerSketch = (p, props) => {
     if (!hasInitializedAudio) {
       if (useMicAsSource) {
         initializeAudio();
-      } else if (song.isLoaded()) {
+      } else if (song && song.isLoaded()) {
         initializeAudio();
       }
     }
