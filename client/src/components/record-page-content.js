@@ -9,6 +9,7 @@ import audioVisualizerSketch from "../p5-scripts/audio-visualizer-sketch";
 import recorderVisualizerSketch from "../p5-scripts/recorder-visualizer-sketch";
 import useInterval from "../utilities/use-interval";
 import lerpColor from "../utilities/lerp-color";
+import isMobile from "../utilities/is-mobile";
 import { RECORD_STATES } from "../utilities/state-manager";
 
 //   export const RECORD_STATES = {
@@ -121,6 +122,7 @@ function RecordingContent({
 
   useEffect(() => {
     if (!processingRef.current) return;
+    if (isMobile()) return;
 
     const height = processingRef.current.clientHeight;
 
