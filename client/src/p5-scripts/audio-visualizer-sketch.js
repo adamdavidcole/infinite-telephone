@@ -29,6 +29,7 @@ let audioVisualizerSketch = (p, props) => {
         onAudioEnded();
       });
 
+      console.log("Sound loaded with duration:", song.duration());
       song.play();
     }
 
