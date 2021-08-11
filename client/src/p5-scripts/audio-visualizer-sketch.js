@@ -23,7 +23,11 @@ let audioVisualizerSketch = (p, props) => {
       // TODO: Mic in doesn't work when song has been played earlier
       mic = new window.p5.AudioIn();
       mic.start();
+      console.log("mic", mic);
+      console.log("audioVisualizerSketch: using mic as input");
     } else {
+      console.log("audioVisualizerSketch: using audio file as input");
+
       song.onended(() => {
         console.log("audioVisualizerSketch: audio has ended");
         onAudioEnded();

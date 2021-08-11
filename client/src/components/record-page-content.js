@@ -107,14 +107,14 @@ function RecordingContent({
 
     const height = processingRef.current.clientHeight;
 
-    // new window.p5(
-    //   (p) =>
-    //     audioVisualizerSketch(p, {
-    //       useMicAsSource: true,
-    //       height,
-    //     }),
-    //   processingRef.current
-    // );
+    new window.p5(
+      (p) =>
+        audioVisualizerSketch(p, {
+          useMicAsSource: true,
+          height,
+        }),
+      processingRef.current
+    );
   }, []);
 
   const progressDecimal = (recordingDuration - countdown) / recordingDuration;
