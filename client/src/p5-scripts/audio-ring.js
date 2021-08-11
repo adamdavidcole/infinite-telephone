@@ -64,7 +64,7 @@ export default class AudioRing {
 
         // const volMapped = p.map(vol, 0, 1, 0, 100);
 
-        let r = p.height * 0.5; //this.size * 4;
+        let r = p.height * 0.65; //this.size * 4;
         // if (ringIndex === ringCount - 1) {
 
         // TRY

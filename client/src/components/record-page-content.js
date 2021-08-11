@@ -6,6 +6,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 // eslint-disable import/first
 
 import audioVisualizerSketch from "../p5-scripts/audio-visualizer-sketch";
+import recorderVisualizerSketch from "../p5-scripts/recorder-visualizer-sketch";
 import useInterval from "../utilities/use-interval";
 import lerpColor from "../utilities/lerp-color";
 import { RECORD_STATES } from "../utilities/state-manager";
@@ -39,11 +40,22 @@ function RestingContent({
   );
 }
 
-function ListenContent({ audioFilenameAsMp3, onAudioEnded }) {
+function ListenContent({ audioFilenameAsMp3, transitionToNextState }) {
   const processingRef = useRef();
+  const sketchRef = useRef();
+
+  const onAudioEnded = useCallback(() => {
+    if (sketchRef.current) sketchRef.current.cleanup();
+    transitionToNextState();
+  }, [transitionToNextState]);
 
   useEffect(() => {
-    new window.p5(
+    if (!audioFilenameAsMp3) {
+      onAudioEnded();
+      return;
+    }
+
+    sketchRef.current = new window.p5(
       (p) =>
         audioVisualizerSketch(p, {
           audioFilenameAsMp3,
@@ -52,7 +64,7 @@ function ListenContent({ audioFilenameAsMp3, onAudioEnded }) {
         }),
       processingRef.current
     );
-  }, [audioFilenameAsMp3, onAudioEnded]);
+  }, [audioFilenameAsMp3]);
 
   return (
     <div id="p_record_page_listen_content__canvas" ref={processingRef}></div>
@@ -78,6 +90,7 @@ function RecordingContent({
 }) {
   const recordingDuration = 30;
   const processingRef = useRef();
+  const sketchRef = useRef();
   const [countdown, setCountdown] = useState(recordingDuration);
 
   useInterval(() => {
@@ -90,16 +103,20 @@ function RecordingContent({
     startRecording();
   }, [startRecording]);
 
-  useEffect(() => {
-    if (countdown === 0) {
-      stopRecording();
-      transitionToNextState();
-    }
-  }, [countdown, stopRecording, transitionToNextState]);
-
-  function onDoneClicked() {
+  const onRecordingComplete = useCallback(() => {
+    sketchRef.current?.cleanup();
     stopRecording();
     transitionToNextState();
+  }, [stopRecording, transitionToNextState]);
+
+  useEffect(() => {
+    if (countdown === 0) {
+      onRecordingComplete();
+    }
+  }, [countdown, onRecordingComplete]);
+
+  function onDoneClicked() {
+    onRecordingComplete();
   }
 
   useEffect(() => {
@@ -107,9 +124,9 @@ function RecordingContent({
 
     const height = processingRef.current.clientHeight;
 
-    new window.p5(
+    sketchRef.current = new window.p5(
       (p) =>
-        audioVisualizerSketch(p, {
+        recorderVisualizerSketch(p, {
           useMicAsSource: true,
           height,
         }),
@@ -214,6 +231,7 @@ export default function RecordPageContent({
         <ListenContent
           audioFilenameAsMp3={audioFilenameAsMp3}
           onAudioEnded={onAudioEnded}
+          transitionToNextState={transitionToNextState}
         />
       );
       break;

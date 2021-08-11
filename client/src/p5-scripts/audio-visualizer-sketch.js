@@ -1,100 +1,53 @@
 import AudioRing from "./audio-ring";
 
 let audioVisualizerSketch = (p, props) => {
-  const { audioFilenameAsMp3, onAudioEnded, useMicAsSource, height } = props;
-
-  console.log("p", p);
-
-  console.log("useMicAsSource", useMicAsSource);
-
-  const size = 50;
+  const { audioFilenameAsMp3, onAudioEnded, height } = props;
 
   let song;
-  let mic;
   let amplitude;
   let audioRing;
+  let timestamp = Date.now();
 
-  let hasInitializedAudio = false;
-
-  function initializeAudio() {
-    hasInitializedAudio = true;
-
-    if (useMicAsSource) {
-      // TODO: Mic in doesn't work when song has been played earlier
-      mic = new window.p5.AudioIn();
-      mic.start();
-      console.log("mic", mic);
-      console.log("audioVisualizerSketch: using mic as input");
-    } else {
-      console.log("audioVisualizerSketch: using audio file as input");
-
-      song.onended(() => {
-        console.log("audioVisualizerSketch: audio has ended");
-        onAudioEnded();
-      });
-
-      console.log("Sound loaded with duration:", song.duration());
-      song.play();
-    }
-
-    amplitude = useMicAsSource ? mic.amplitude : new window.p5.Amplitude();
-    amplitude.toggleNormalize(true);
-    amplitude.smooth(0.75);
-
-    audioRing = new AudioRing({ p, amplitude });
-  }
+  let hasCalledOnEnded = false;
 
   p.preload = () => {
-    if (!useMicAsSource && audioFilenameAsMp3) {
+    if (audioFilenameAsMp3) {
       song = p.loadSound(audioFilenameAsMp3);
-      console.log("song", song);
     }
   };
 
   p.setup = function () {
-    if (!useMicAsSource && !audioFilenameAsMp3) {
-      onAudioEnded();
-    }
-
-    // if (!useMicAsSource && audioFilenameAsMp3) {
-    //   song = new window.p5.SoundFile(audioFilenameAsMp3);
-    // }
-
     p.createCanvas(p.windowWidth, height || p.windowHeight);
 
-    // if (useMicAsSource) {
-    //   // TODO: Mic in doesn't work when song has been played earlier
-    //   mic = new AudioIn();
-    //   mic.start();
-    // } else {
-    //   song.onended(() => {
-    //     console.log("audioVisualizerSketch: audio has ended");
-    //     onAudioEnded();
-    //   });
+    console.log("audioVisualizerSketch: setup", timestamp);
 
-    //   song.play();
-    // }
+    song.onended(() => {
+      if (hasCalledOnEnded) return;
 
-    // console.log("mic", mic);
+      // TODO: figure out why onended is called more then once
+      hasCalledOnEnded = true;
+      console.log("audioVisualizerSketch: audio has ended");
+      onAudioEnded();
+    });
 
-    // amplitude = useMicAsSource ? mic.amplitude : new Amplitude();
-    // amplitude.toggleNormalize(true);
-    // amplitude.smooth(0.75);
+    song.play();
 
-    // audioRing = new AudioRing({ p, amplitude });
+    amplitude = new window.p5.Amplitude();
+    amplitude.toggleNormalize(true);
+    amplitude.smooth(0.75);
+
+    audioRing = new AudioRing({ p, amplitude });
   };
 
   p.draw = () => {
-    if (!hasInitializedAudio) {
-      if (useMicAsSource) {
-        initializeAudio();
-      } else if (song && song.isLoaded()) {
-        initializeAudio();
-      }
-    }
-
+    // console.log("audioVisualLiser ID running", timestamp);
     p.background(17);
     if (audioRing) audioRing.draw(p);
+  };
+
+  p.cleanup = () => {
+    console.log("audioVisualLiser cleanup", timestamp);
+    p.remove();
   };
 };
 

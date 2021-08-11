@@ -81,9 +81,10 @@ export default function RecordPage() {
     return mostRecentAudioFilename;
   }
 
-  const onAudioEnded = useCallback(() => {
+  const onAudioEnded = useCallback((callback) => {
     transitionToNextState();
     setIsPlayingAudio(false);
+    // if (callback) callback();
   }, []);
 
   // MAYBE DELETE
