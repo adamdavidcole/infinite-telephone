@@ -24,7 +24,7 @@ const wordStripMap = {};
 let wordBalls = [];
 const wordBallCount = 20;
 
-const WIDTH_PER_STRIP = 200;
+const WIDTH_PER_STRIP = 300;
 
 let sketch = (p) => {
   //   window.p5 = p;
@@ -40,7 +40,7 @@ let sketch = (p) => {
 
     if (window.MODE === window.modes.LINEAR) {
       const canvasWidth = WIDTH_PER_STRIP * data.length;
-      p.createCanvas(canvasWidth, p.windowWidth * (9 / 16) * 2);
+      p.createCanvas(canvasWidth, p.windowHeight);
     } else if (window.MODE === window.modes.RADIAL) {
       p.createCanvas(1000, 1000);
     }
@@ -89,6 +89,7 @@ let sketch = (p) => {
       wordStripMap[id] = wordStrip;
     });
 
+    // wordStrips.splice(2, wordStrips.length - 2);
     wordStrips.forEach((wordStrip) => wordStrip.initialize());
 
     // path = new Path();

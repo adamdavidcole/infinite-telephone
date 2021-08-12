@@ -11,13 +11,18 @@ export default class WordDot {
     this.borderRadius = 2;
   }
 
+  update() {
+    this.position.x = this.position.x - Math.random();
+    this.position.y = this.position.y + (Math.random() - 0.5) / 10;
+  }
+
   draw(p) {
     p.noStroke();
-    p.fill(255);
+    p.fill(100);
 
     p.rect(
       this.position.x,
-      this.position.y,
+      this.position.y - this.height,
       this.width,
       this.height,
       this.borderRadius

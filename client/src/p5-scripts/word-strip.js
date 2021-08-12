@@ -6,15 +6,17 @@ import {
   getConsecutiveWordCounts,
 } from "../data/data-processor";
 
-import { isUndefined } from "lodash";
+import { isUndefined, sortBy, takeRight } from "lodash";
 import WordDot from "./word-dot";
 import Link from "./link";
 import Wire from "./wire";
 
 const TOP_PADDING = 20;
+const BOTTOM_PADDING = 60;
 const LEFT_PADDING = 10;
 const WORD_DOT_PADDING = 5;
 
+const MAX_WORD_DOTS = 80;
 export default class WordStrip {
   constructor({ p, id, visibleBubbleCount, index, wordStripMap }) {
     this.p = p;
@@ -32,7 +34,7 @@ export default class WordStrip {
       this.rectWidth + padding,
       p.width - this.rectWidth - padding
     );
-    this.position = p.createVector(x, TOP_PADDING);
+    this.position = p.createVector(x, p.height - BOTTOM_PADDING);
 
     this.wordCounts = { ...getWordCountsById(this.id) };
     this.wordsInCommon = getWordsInCommonById(this.id);
@@ -55,8 +57,46 @@ export default class WordStrip {
     this.generateLinks();
   }
 
-  generateWordDots() {
+  shufflePart(array, part) {
+    const shuffledArray = [...array];
+
+    const startPos = Math.floor(array.length * part);
+    const shuffledPart = shuffledArray.length - startPos;
+
+    for (let i = startPos; i < shuffledArray.length; i++) {
+      const randomIndex = Math.floor(Math.random() * shuffledPart) + startPos;
+
+      const temp = shuffledArray[i];
+      shuffledArray[i] = shuffledArray[randomIndex];
+      shuffledArray[randomIndex] = temp;
+    }
+
+    return shuffledArray;
+  }
+
+  getSortedWordKeys() {
+    const prevId = getNextId(this.id);
+    const consecutiveWordCounts = getConsecutiveWordCounts(this.id);
+    const prevConsecutiveWordCounts = getConsecutiveWordCounts(prevId);
+
     const wordKeys = Object.keys(this.wordCounts);
+
+    const sortedWordKeys = sortBy(wordKeys, (wordKey) => {
+      const consecutiveWordCount = consecutiveWordCounts?.[wordKey] || 0;
+      const prevConsecutiveWordCount =
+        prevConsecutiveWordCounts?.[wordKey] || 0;
+      return consecutiveWordCount + prevConsecutiveWordCount;
+      // const count = this.wordCounts[wordKey];
+      // return count;
+    });
+
+    return this.shufflePart(sortedWordKeys, 0.5);
+  }
+
+  generateWordDots() {
+    let wordKeys = this.getSortedWordKeys();
+
+    wordKeys = takeRight(wordKeys, MAX_WORD_DOTS);
 
     let verticalPosition = this.position.y;
     let horizontalPosition = this.position.x;
@@ -75,7 +115,13 @@ export default class WordStrip {
       this.wordDots.push(wordDot);
       this.wordDotMap[word] = wordDot;
 
-      verticalPosition += wordDot.height + WORD_DOT_PADDING;
+      console.log(
+        "verticalPosition",
+        verticalPosition,
+        "wordDot.height",
+        wordDot.height
+      );
+      verticalPosition = verticalPosition - (wordDot.height + WORD_DOT_PADDING);
     });
   }
 
@@ -119,11 +165,16 @@ export default class WordStrip {
     });
   }
 
-  draw(p) {
+  update() {
+    this.wordDots.forEach((wordDot) => wordDot.update());
     this.wires.forEach((wire) => wire.update());
+  }
 
-    this.wordDots.forEach((wordDots) => {
-      wordDots.draw(p);
+  draw(p) {
+    this.update();
+
+    this.wordDots.forEach((wordDot) => {
+      wordDot.draw(p);
     });
 
     // this.links.forEach((link) => link.draw(this.p));

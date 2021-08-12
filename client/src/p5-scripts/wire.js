@@ -3,7 +3,7 @@ import Particle from "./particle";
 import Spring from "./spring";
 
 const PARTCILES_PER_STRING = 10;
-const k = 0.7;
+const k = 1;
 
 export default class Wire {
   constructor({ start, end, word, weight, p }) {
