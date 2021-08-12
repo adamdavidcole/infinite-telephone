@@ -9,6 +9,7 @@ import {
 import { isUndefined } from "lodash";
 import WordDot from "./word-dot";
 import Link from "./link";
+import Wire from "./wire";
 
 const TOP_PADDING = 20;
 const LEFT_PADDING = 10;
@@ -40,6 +41,7 @@ export default class WordStrip {
     this.wordDotMap = {};
 
     this.links = [];
+    this.wires = [];
 
     this.hadPrinted = false;
   }
@@ -106,14 +108,25 @@ export default class WordStrip {
         word,
       });
       this.links.push(link);
+      const wire = new Wire({
+        start: startWordBall.position,
+        end: endWordBall.position,
+        p: this.p,
+        weight,
+        word,
+      });
+      this.wires.push(wire);
     });
   }
 
   draw(p) {
+    this.wires.forEach((wire) => wire.update());
+
     this.wordDots.forEach((wordDots) => {
       wordDots.draw(p);
     });
 
-    this.links.forEach((link) => link.draw(this.p));
+    // this.links.forEach((link) => link.draw(this.p));
+    this.wires.forEach((wire) => wire.draw(this.p));
   }
 }

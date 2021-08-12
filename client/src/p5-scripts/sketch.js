@@ -5,6 +5,7 @@ import { processData } from "../data/data-processor";
 import Path from "./path";
 import WordBall from "./word-ball";
 import WordStrip from "./word-strip";
+import Wire from "./wire";
 
 const SAVE_PHOTO = false;
 

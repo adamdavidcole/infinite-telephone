@@ -5,8 +5,9 @@ export default class WordDot {
 
     this.position = p.createVector(x, y);
 
-    this.width = 2;
-    this.height = 2 * this.count;
+    this.width = 4;
+    this.height = Math.max(this.width * (this.count / 2), this.width);
+    // this.height = this.width;
     this.borderRadius = 2;
   }
 
