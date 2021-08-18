@@ -18,7 +18,7 @@ const { BEFORE_ANIMATION, ANIMATING, AFTER_ANIMATION } = ANIMATION_STATUS;
 
 const TOP_PADDING = 20;
 const BOTTOM_PADDING = 60;
-const LEFT_PADDING = 10;
+const LEFT_PADDING = 50;
 const WORD_DOT_PADDING = 5;
 
 const MAX_WORD_DOTS = 80;
@@ -39,7 +39,10 @@ export default class WordStrip {
       this.rectWidth + padding,
       p.width - this.rectWidth - padding
     );
-    this.position = p.createVector(x, p.height - BOTTOM_PADDING);
+    this.position = p.createVector(
+      this.p.width - LEFT_PADDING,
+      p.height - BOTTOM_PADDING
+    );
 
     this.wordCounts = { ...getWordCountsById(this.id) };
     this.wordsInCommon = getWordsInCommonById(this.id);
@@ -181,7 +184,9 @@ export default class WordStrip {
   startAnimation({ animationStartTime, animationStatus }) {
     this.animationStartTime = animationStartTime;
     this.animationStatus = animationStatus;
-    console.log("starting animation for ", this.id);
+
+    // MAYBE?
+    this.initialize();
 
     // this.playAudio();
 

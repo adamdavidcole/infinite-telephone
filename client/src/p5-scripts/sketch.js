@@ -11,12 +11,6 @@ import SceneManager from "./scene-manager";
 
 const SAVE_PHOTO = false;
 
-window.modes = {
-  LINEAR: "linear",
-  RADIAL: "radial",
-};
-window.MODE = window.modes.LINEAR;
-
 let path;
 
 let wordStrip;
@@ -42,12 +36,8 @@ let sketch = (p) => {
   p.setup = function () {
     if (SAVE_PHOTO) p.pixelDensity(4);
 
-    if (window.MODE === window.modes.LINEAR) {
-      const canvasWidth = WIDTH_PER_STRIP * data.length;
-      p.createCanvas(canvasWidth, p.windowHeight);
-    } else if (window.MODE === window.modes.RADIAL) {
-      p.createCanvas(1000, 1000);
-    }
+    p.createCanvas(p.windowWidth, p.windowHeight);
+
     p.background(0);
 
     // const initialData = data[0];
@@ -94,7 +84,7 @@ let sketch = (p) => {
     });
 
     // wordStrips.splice(2, wordStrips.length - 2);
-    wordStrips.forEach((wordStrip) => wordStrip.initialize());
+    // wordStrips.forEach((wordStrip) => wordStrip.initialize());
 
     sceneManager = new SceneManager({ wordStrips });
     // path = new Path();
