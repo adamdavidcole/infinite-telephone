@@ -6,19 +6,17 @@ const { BEFORE_ANIMATION, ANIMATING, AFTER_ANIMATION } = ANIMATION_STATUS;
 const ANIMATION_DURATION = 10000;
 
 export default class SceneManager {
-  constructor({ wordStrips }) {
-    console.log("NEW SCENE MANAGER");
+  constructor({ wordStrips, audioManager }) {
     this.wordStrips = wordStrips;
+    this.audioManager = audioManager;
     this.animationStatus = {};
 
-    this.animationDuration = 10000;
     this.animationStateById = {};
     // this.animationStatus = BEFORE_ANIMATION;
     // this.animationStartTime = undefined;
 
     this.currentlyAnimatingIndex = 1;
     this.startAnimation(this.currentlyAnimatingIndex);
-    console.log("this.currentlyAnimatingIndex", this.currentlyAnimatingIndex);
   }
 
   startAnimation(index) {
@@ -29,10 +27,14 @@ export default class SceneManager {
     const animationState = {
       animationStatus: ANIMATING,
       animationStartTime: Date.now(),
+      animationDuration: ANIMATION_DURATION,
     };
     this.animationStateById[index] = animationState;
 
     animatingWordStrip?.startAnimation(animationState);
+
+    const id = animatingWordStrip.id;
+    this.audioManager.beginAudioById(id);
   }
 
   endAnimation(index) {
@@ -47,16 +49,19 @@ export default class SceneManager {
     this.animationStateById[index] = animationState;
 
     animatingWordStrip?.endAnimation(animationState);
+
+    const id = animatingWordStrip.id;
+    this.audioManager.beginAudioFadeOut(id);
   }
 
   hasAnimationCompleted(index) {
-    const { animationStatus, animationStartTime } =
+    const { animationStatus, animationStartTime, animationDuration } =
       this.animationStateById[index] || {};
     if (animationStatus === AFTER_ANIMATION) return true;
     if (!animationStartTime) return false;
 
     const timeElapsed = Date.now() - animationStartTime;
-    return timeElapsed > ANIMATION_DURATION;
+    return timeElapsed > animationDuration;
   }
 
   update() {

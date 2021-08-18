@@ -8,6 +8,7 @@ import WordBall from "./word-ball";
 import WordStrip from "./word-strip";
 import Wire from "./wire";
 import SceneManager from "./scene-manager";
+import AudioManager from "./audio-manager";
 
 const SAVE_PHOTO = false;
 
@@ -18,6 +19,7 @@ let wordStrips = [];
 const wordStripMap = {};
 
 let sceneManager;
+let audioManager;
 
 let wordBalls = [];
 const wordBallCount = 20;
@@ -86,7 +88,8 @@ let sketch = (p) => {
     // wordStrips.splice(2, wordStrips.length - 2);
     // wordStrips.forEach((wordStrip) => wordStrip.initialize());
 
-    sceneManager = new SceneManager({ wordStrips });
+    audioManager = new AudioManager();
+    sceneManager = new SceneManager({ wordStrips, audioManager });
     // path = new Path();
     // const pathResolution = 20;
     // const angleStep = p.TWO_PI / pathResolution;

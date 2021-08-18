@@ -7,13 +7,12 @@ import {
   getAudioFilenameById,
 } from "../../data/data-processor.js";
 
-import { isUndefined, sortBy, takeRight } from "lodash";
+import { isUndefined, sortBy, takeRight, take, drop } from "lodash";
 import WordDot from "./word-dot";
 import Link from "./link";
 import Wire from "./wire";
 import ANIMATION_STATUS from "../../utilities/animation-status";
 
-const AUDIO_URL_PATH_PREFIX = "/media/audio/";
 const { BEFORE_ANIMATION, ANIMATING, AFTER_ANIMATION } = ANIMATION_STATUS;
 
 const TOP_PADDING = 20;
@@ -21,7 +20,7 @@ const BOTTOM_PADDING = 60;
 const LEFT_PADDING = 100;
 const WORD_DOT_PADDING = 5;
 
-const MAX_WORD_DOTS = 80;
+const MAX_WORD_DOTS = 85;
 export default class WordStrip {
   constructor({ p, id, visibleBubbleCount, index, wordStripMap }) {
     this.p = p;
@@ -102,7 +101,8 @@ export default class WordStrip {
       // return count;
     });
 
-    return this.shufflePart(sortedWordKeys, 0.5);
+    let shuffledWordKeys = this.shufflePart(sortedWordKeys, 0.5);
+    return shuffledWordKeys;
   }
 
   generateWordDots() {
@@ -169,21 +169,10 @@ export default class WordStrip {
     });
   }
 
-  playAudio() {
-    const filename = getAudioFilenameById(this.id);
-    if (!filename) return;
-
-    console.log("playAudio for: ", filename);
-    // this.audioObj = new Audio(`${AUDIO_URL_PATH_PREFIX}${filename}`);
-    // this.audioObj.addEventListener("canplaythrough", (event) => {
-    //   /* the audio is now playable; play it if permissions allow */
-    //   this.audioObj.play();
-    // });
-  }
-
-  startAnimation({ animationStartTime, animationStatus }) {
+  startAnimation({ animationStartTime, animationStatus, animationDuration }) {
     this.animationStartTime = animationStartTime;
     this.animationStatus = animationStatus;
+    this.animationDuration = animationDuration;
 
     // MAYBE?
     this.initialize();
@@ -194,6 +183,7 @@ export default class WordStrip {
       wire.setAnimationStatus({
         animationStatus: this.animationStatus,
         animationStartTime: this.animationStartTime,
+        animationDuration: this.animationDuration,
       });
     });
   }
@@ -201,7 +191,6 @@ export default class WordStrip {
   endAnimation() {
     this.animationStartTime = undefined;
     this.animationStatus = AFTER_ANIMATION;
-    // this.audioObj.volume = 0.2;
   }
 
   isDoneAnimating() {
@@ -221,7 +210,7 @@ export default class WordStrip {
   }
 
   getWordDotsToDrawCount() {
-    const relativeSpeed = 1.5;
+    const relativeSpeed = 1;
     const wordDotsToDrawCount = Math.floor(
       this.getAnimationProgress() * this.wordDots.length * relativeSpeed
     );

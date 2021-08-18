@@ -25,8 +25,7 @@ export default class Wire {
 
     this.animationDuration = 10000;
     this.animationStatus = BEFORE_ANIMATION;
-    this.animationStartTime = Date.now();
-    this.animationSpeed = p.random(1, 2);
+    this.animationSpeed = p.random(0.8, 1.2);
 
     this.particles = [];
     this.springs = [];
@@ -58,7 +57,12 @@ export default class Wire {
     this.tail.position = end;
   }
 
-  setAnimationStatus({ animationStatus, animationStartTime }) {
+  setAnimationStatus({
+    animationStatus,
+    animationStartTime,
+    animationDuration,
+  }) {
+    this.animationDuration = animationDuration;
     this.animationStatus = animationStatus;
     this.animationStartTime = animationStartTime;
   }
