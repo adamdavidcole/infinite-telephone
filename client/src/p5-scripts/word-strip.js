@@ -4,12 +4,17 @@ import {
   getPrevId,
   getNextId,
   getConsecutiveWordCounts,
+  getAudioFilenameById,
 } from "../data/data-processor";
 
 import { isUndefined, sortBy, takeRight } from "lodash";
 import WordDot from "./word-dot";
 import Link from "./link";
 import Wire from "./wire";
+import ANIMATION_STATUS from "../utilities/animation-status";
+
+const AUDIO_URL_PATH_PREFIX = "/media/audio/";
+const { BEFORE_ANIMATION, ANIMATING, AFTER_ANIMATION } = ANIMATION_STATUS;
 
 const TOP_PADDING = 20;
 const BOTTOM_PADDING = 60;
@@ -38,6 +43,10 @@ export default class WordStrip {
 
     this.wordCounts = { ...getWordCountsById(this.id) };
     this.wordsInCommon = getWordsInCommonById(this.id);
+
+    this.animationDuration = 10000;
+    this.animationStatus = BEFORE_ANIMATION;
+    this.animationStartTime = undefined;
 
     this.wordDots = [];
     this.wordDotMap = {};
@@ -115,12 +124,6 @@ export default class WordStrip {
       this.wordDots.push(wordDot);
       this.wordDotMap[word] = wordDot;
 
-      console.log(
-        "verticalPosition",
-        verticalPosition,
-        "wordDot.height",
-        wordDot.height
-      );
       verticalPosition = verticalPosition - (wordDot.height + WORD_DOT_PADDING);
     });
   }
@@ -131,8 +134,6 @@ export default class WordStrip {
 
     const prevWordStrip = this.wordStripMap[prevId];
     if (!prevWordStrip) return;
-
-    console.log("prevId", prevId, prevWordStrip);
 
     const wordsInCommon = getWordsInCommonById(this.id);
     const consecutiveWordCount = getConsecutiveWordCounts(this.id);
@@ -165,6 +166,64 @@ export default class WordStrip {
     });
   }
 
+  playAudio() {
+    const filename = getAudioFilenameById(this.id);
+    if (!filename) return;
+
+    console.log("playAudio for: ", filename);
+    // this.audioObj = new Audio(`${AUDIO_URL_PATH_PREFIX}${filename}`);
+    // this.audioObj.addEventListener("canplaythrough", (event) => {
+    //   /* the audio is now playable; play it if permissions allow */
+    //   this.audioObj.play();
+    // });
+  }
+
+  startAnimation({ animationStartTime, animationStatus }) {
+    this.animationStartTime = animationStartTime;
+    this.animationStatus = animationStatus;
+    console.log("starting animation for ", this.id);
+
+    // this.playAudio();
+
+    this.wires.forEach((wire) => {
+      wire.setAnimationStatus({
+        animationStatus: this.animationStatus,
+        animationStartTime: this.animationStartTime,
+      });
+    });
+  }
+
+  endAnimation() {
+    this.animationStartTime = undefined;
+    this.animationStatus = AFTER_ANIMATION;
+    // this.audioObj.volume = 0.2;
+  }
+
+  isDoneAnimating() {
+    if (this.animationStatus === AFTER_ANIMATION) return true;
+
+    const timeElapsed = Date.now() - this.animationStartTime;
+    return timeElapsed > this.animationDuration;
+  }
+
+  getAnimationProgress() {
+    if (this.animationStatus === BEFORE_ANIMATION) return 0;
+    if (this.animationStatus === AFTER_ANIMATION) return 1;
+
+    const timeElapsed = Date.now() - this.animationStartTime;
+    const animationProgress = timeElapsed / this.animationDuration;
+    return Math.min(animationProgress, 1);
+  }
+
+  getWordDotsToDrawCount() {
+    const relativeSpeed = 1.5;
+    const wordDotsToDrawCount = Math.floor(
+      this.getAnimationProgress() * this.wordDots.length * relativeSpeed
+    );
+
+    return Math.min(this.wordDots.length, wordDotsToDrawCount);
+  }
+
   update() {
     this.wordDots.forEach((wordDot) => wordDot.update());
     this.wires.forEach((wire) => wire.update());
@@ -173,9 +232,10 @@ export default class WordStrip {
   draw(p) {
     this.update();
 
-    this.wordDots.forEach((wordDot) => {
+    for (let i = 0; i < this.getWordDotsToDrawCount(); i++) {
+      const wordDot = this.wordDots[i];
       wordDot.draw(p);
-    });
+    }
 
     // this.links.forEach((link) => link.draw(this.p));
     this.wires.forEach((wire) => wire.draw(this.p));

@@ -2,10 +2,12 @@ import SpeechBubble from "./speech-bubble";
 import data from "../data/audio-data.json";
 import { getOrderedIds } from "../data/data-processor";
 import { processData } from "../data/data-processor";
+import { getNextId } from "../data/data-processor";
 import Path from "./path";
 import WordBall from "./word-ball";
 import WordStrip from "./word-strip";
 import Wire from "./wire";
+import SceneManager from "./scene-manager";
 
 const SAVE_PHOTO = false;
 
@@ -20,6 +22,8 @@ let path;
 let wordStrip;
 let wordStrips = [];
 const wordStripMap = {};
+
+let sceneManager;
 
 let wordBalls = [];
 const wordBallCount = 20;
@@ -92,6 +96,7 @@ let sketch = (p) => {
     // wordStrips.splice(2, wordStrips.length - 2);
     wordStrips.forEach((wordStrip) => wordStrip.initialize());
 
+    sceneManager = new SceneManager({ wordStrips });
     // path = new Path();
     // const pathResolution = 20;
     // const angleStep = p.TWO_PI / pathResolution;
@@ -143,6 +148,8 @@ let sketch = (p) => {
   };
 
   p.draw = function () {
+    sceneManager.update();
+
     p.clear();
     p.background(0);
     p.blendMode(p.ADD);

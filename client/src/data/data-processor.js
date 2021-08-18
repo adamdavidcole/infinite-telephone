@@ -31,6 +31,10 @@ export function getOrderedIds() {
   return [...dataStore.sortedIds];
 }
 
+export function getAudioFilenameById(id) {
+  return dataStore?.[id]?.filename;
+}
+
 export function getWordCountsById(id) {
   return dataStore?.[id]?.wordCounts;
 }

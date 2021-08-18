@@ -1,6 +1,7 @@
 import { Vector } from "p5";
 import Particle from "./particle";
 import Spring from "./spring";
+import ANIMATION_STATUS from "../utilities/animation-status";
 
 const PARTCILES_PER_STRING = 10;
 const k = 1;
@@ -11,7 +12,7 @@ const ANIMATION_STEPS = {
   AFTER_ANIMATION: "AFTER_ANIMATION",
 };
 
-const { BEFORE_ANIMATION, ANIMATING, AFTER_ANIMATION } = ANIMATION_STEPS;
+const { BEFORE_ANIMATION, ANIMATING, AFTER_ANIMATION } = ANIMATION_STATUS;
 
 export default class Wire {
   constructor({ start, end, word, weight, p }) {
@@ -22,9 +23,10 @@ export default class Wire {
     this.word = word;
     this.weight = weight;
 
-    this.animationDuration = 5000;
-    this.animationStatus = ANIMATING;
+    this.animationDuration = 10000;
+    this.animationStatus = BEFORE_ANIMATION;
     this.animationStartTime = Date.now();
+    this.animationSpeed = p.random(1, 2);
 
     this.particles = [];
     this.springs = [];
@@ -56,9 +58,16 @@ export default class Wire {
     this.tail.position = end;
   }
 
+  setAnimationStatus({ animationStatus, animationStartTime }) {
+    this.animationStatus = animationStatus;
+    this.animationStartTime = animationStartTime;
+  }
+
   getAnimationProgress(p) {
     const timeElapsed = Date.now() - this.animationStartTime;
-    return p.min(timeElapsed / this.animationDuration, 1);
+    const animationProgress =
+      (timeElapsed / this.animationDuration) * this.animationSpeed;
+    return p.min(animationProgress, 1);
   }
 
   update() {
@@ -72,6 +81,8 @@ export default class Wire {
   }
 
   draw(p) {
+    if (this.animationStatus === BEFORE_ANIMATION) return;
+
     const r = p.pow(this.word.charCodeAt(0), 2) % 255;
     const g = 60;
     const b = p.pow(this.word.charCodeAt(1), 1) % 255;
