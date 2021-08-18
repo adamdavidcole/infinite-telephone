@@ -1,7 +1,7 @@
 import { Vector } from "p5";
 import Particle from "./particle";
 import Spring from "./spring";
-import ANIMATION_STATUS from "../utilities/animation-status";
+import ANIMATION_STATUS from "../../utilities/animation-status.js";
 
 const PARTCILES_PER_STRING = 10;
 const k = 1;

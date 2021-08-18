@@ -1,6 +1,6 @@
 import { first, nth } from "lodash";
-import { getAudioFilenameById } from "../data/data-processor";
-import ANIMATION_STATUS from "../utilities/animation-status";
+import { getAudioFilenameById } from "../../data/data-processor.js";
+import ANIMATION_STATUS from "../../utilities/animation-status";
 
 const { BEFORE_ANIMATION, ANIMATING, AFTER_ANIMATION } = ANIMATION_STATUS;
 const ANIMATION_DURATION = 10000;

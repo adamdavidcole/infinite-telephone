@@ -12,7 +12,7 @@ export default class WordDot {
   }
 
   update() {
-    this.position.x = this.position.x - Math.random();
+    this.position.x = this.position.x - Math.random() * 1.125;
     this.position.y = this.position.y + (Math.random() - 0.5) / 10;
   }
 

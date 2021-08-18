@@ -7,7 +7,7 @@ import {
   getPrevId,
   getNextId,
   getConsecutiveWordCounts,
-} from "../data/data-processor";
+} from "../../data/data-processor";
 import WordBall from "./word-ball";
 import Path from "./path";
 import Link from "./link";

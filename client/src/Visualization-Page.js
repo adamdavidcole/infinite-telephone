@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 // import P5 from "p5";
 // import "p5/lib/addons/p5.sound";
 
-import sketch from "./p5-scripts/sketch";
+import sketch from "./p5-scripts/visualization-page/sketch.js";
 
 export default function VisualizationPage() {
   const processingRef = useRef();

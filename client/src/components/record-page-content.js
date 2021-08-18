@@ -5,8 +5,8 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 // window.p5 = P5; // I need this otherwise it throws an error
 // eslint-disable import/first
 
-import audioVisualizerSketch from "../p5-scripts/audio-visualizer-sketch";
-import recorderVisualizerSketch from "../p5-scripts/recorder-visualizer-sketch";
+import audioVisualizerSketch from "../p5-scripts/record-page/audio-visualizer-sketch.js";
+import recorderVisualizerSketch from "../p5-scripts/record-page/recorder-visualizer-sketch";
 import useInterval from "../utilities/use-interval";
 import lerpColor from "../utilities/lerp-color";
 import isMobile from "../utilities/is-mobile";

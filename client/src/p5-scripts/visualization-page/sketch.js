@@ -1,8 +1,8 @@
 import SpeechBubble from "./speech-bubble";
-import data from "../data/audio-data.json";
-import { getOrderedIds } from "../data/data-processor";
-import { processData } from "../data/data-processor";
-import { getNextId } from "../data/data-processor";
+import data from "../../data/audio-data.json";
+import { getOrderedIds } from "../../data/data-processor";
+import { processData } from "../../data/data-processor";
+import { getNextId } from "../../data/data-processor";
 import Path from "./path";
 import WordBall from "./word-ball";
 import WordStrip from "./word-strip";

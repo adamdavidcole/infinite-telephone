@@ -5,20 +5,20 @@ import {
   getNextId,
   getConsecutiveWordCounts,
   getAudioFilenameById,
-} from "../data/data-processor";
+} from "../../data/data-processor.js";
 
 import { isUndefined, sortBy, takeRight } from "lodash";
 import WordDot from "./word-dot";
 import Link from "./link";
 import Wire from "./wire";
-import ANIMATION_STATUS from "../utilities/animation-status";
+import ANIMATION_STATUS from "../../utilities/animation-status";
 
 const AUDIO_URL_PATH_PREFIX = "/media/audio/";
 const { BEFORE_ANIMATION, ANIMATING, AFTER_ANIMATION } = ANIMATION_STATUS;
 
 const TOP_PADDING = 20;
 const BOTTOM_PADDING = 60;
-const LEFT_PADDING = 50;
+const LEFT_PADDING = 100;
 const WORD_DOT_PADDING = 5;
 
 const MAX_WORD_DOTS = 80;
