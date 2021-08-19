@@ -1,5 +1,4 @@
 import SpeechBubble from "./speech-bubble";
-import data from "../../data/audio-data.json";
 import { getOrderedIds } from "../../data/data-processor";
 import { processData } from "../../data/data-processor";
 import { getNextId } from "../../data/data-processor";
@@ -26,7 +25,7 @@ const wordBallCount = 20;
 
 const WIDTH_PER_STRIP = 300;
 
-let sketch = (p) => {
+let sketch = (p, { audioData, useTestAudio }) => {
   //   window.p5 = p;
   //   console.log(window.p5);
 
@@ -46,7 +45,7 @@ let sketch = (p) => {
     // const speechBubble = new SpeechBubble({ p, ...initialData });
     // speechBubbles.push(speechBubble);
 
-    processData();
+    processData(audioData);
 
     const sortedIds = getOrderedIds();
 
@@ -88,7 +87,7 @@ let sketch = (p) => {
     // wordStrips.splice(2, wordStrips.length - 2);
     // wordStrips.forEach((wordStrip) => wordStrip.initialize());
 
-    audioManager = new AudioManager();
+    audioManager = new AudioManager({ useTestAudio });
     sceneManager = new SceneManager({ wordStrips, audioManager });
     // path = new Path();
     // const pathResolution = 20;

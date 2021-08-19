@@ -1,10 +1,14 @@
 import { getAudioFilenameById } from "../../data/data-processor.js";
 
-const AUDIO_URL_PATH_PREFIX = "/media/audio/";
+const TEST_AUDIO_URL_PATH_PREFIX = "/media/audio/";
+const AUDIO_URL_PATH_PREFIX = "/";
 const AUDIO_FADE_RATE = 0.001;
 
 export default class AudioManager {
-  constructor() {
+  constructor({ useTestAudio }) {
+    this.audioUrlPath = useTestAudio
+      ? TEST_AUDIO_URL_PATH_PREFIX
+      : AUDIO_URL_PATH_PREFIX;
     this.audioObjs = {};
   }
 
@@ -16,7 +20,7 @@ export default class AudioManager {
 
     console.log("AudioManager: playAudio for: ", filename);
 
-    const audioObj = new Audio(`${AUDIO_URL_PATH_PREFIX}${filename}`);
+    const audioObj = new Audio(`${this.audioUrlPath}${filename}`);
     audioObj.preload = true;
     audioObj.addEventListener("canplaythrough", (event) => {
       audioObj.volume = 1;

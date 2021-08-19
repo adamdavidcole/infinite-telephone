@@ -1,5 +1,4 @@
 import stem from "wink-porter2-stemmer";
-import allAudioData from "./audio-data.json";
 import mostCommonWords from "./most-common-words.json";
 import { isEmpty } from "lodash";
 
@@ -32,7 +31,7 @@ export function getOrderedIds() {
 }
 
 export function getAudioFilenameById(id) {
-  return dataStore?.[id]?.filename;
+  return dataStore?.[id]?.processedFilename;
 }
 
 export function getWordCountsById(id) {
@@ -78,7 +77,7 @@ function getNormalizedWords(text) {
   return words;
 }
 
-export function processData() {
+export function processData(allAudioData) {
   // process basic raw data
   for (let i = 0; i < allAudioData.length; i++) {
     const prevAudioData = i > 0 ? allAudioData[i - 1] : null;
@@ -99,7 +98,7 @@ export function processData() {
 
   // process word counts per audio clip
   const wordCountData = allAudioData.map((audioData) => {
-    const normalizedWords = getNormalizedWords(audioData.text);
+    const normalizedWords = getNormalizedWords(audioData.transcript);
     const wordCounts = {};
 
     normalizedWords.forEach((word) => {

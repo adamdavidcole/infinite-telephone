@@ -49,8 +49,13 @@ export default function RecordPage() {
   const fetchAppData = useCallback(() => {
     return getInitialDataAPI()
       .then((res) => {
-        console.log("Initial data:", res);
-        setData(res.data);
+        const data = res.data;
+        console.log(
+          "Visualization-Page: fetched initial data with length: ",
+          data && data.length
+        );
+
+        setData(data);
       })
       .catch((err) => console.log(err));
   }, []);
