@@ -24,9 +24,12 @@ function RestingContent({
   playMostRecentAudio,
   transitionToNextState,
   shadowRGB,
+  fetchAppData,
 }) {
   function onBeginClick() {
-    transitionToNextState();
+    fetchAppData().then(() => {
+      transitionToNextState();
+    });
   }
 
   const buttonStyle = {
@@ -214,6 +217,7 @@ export default function RecordPageContent({
   audioFilenameAsMp3,
   onAudioEnded,
   shadowRGB,
+  fetchAppData,
 }) {
   let recordPageContent = null;
 
@@ -224,6 +228,7 @@ export default function RecordPageContent({
           playMostRecentAudio={playMostRecentAudio}
           transitionToNextState={transitionToNextState}
           shadowRGB={shadowRGB}
+          fetchAppData={fetchAppData}
         />
       );
       break;
@@ -258,6 +263,7 @@ export default function RecordPageContent({
       recordPageContent = (
         <RecordingCompleteContent
           transitionToNextState={transitionToNextState}
+          fetchAppData={fetchAppData}
         />
       );
       break;

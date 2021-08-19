@@ -34,7 +34,7 @@ export async function addDataEntry(dataEntry) {
   console.log("db.data update", data);
   await db.write();
 
-  processDataEntry(dataEntry);
+  return processDataEntry(dataEntry);
 }
 
 /**
@@ -94,6 +94,8 @@ async function handleUpdateDataEntry({
   await db.write();
 
   console.log("DB update for dataEntry", timestamp);
+
+  return nextDataEntry;
 }
 
 function processDataEntry(dataEntry) {
@@ -101,18 +103,22 @@ function processDataEntry(dataEntry) {
   const filenameWithoutExt = removeExtension(filename);
   // const mp3Filename = `${filename.split(".")[0]}.mp3`;
 
-  processAudio({
+  return processAudio({
     inputFilename: `./files/${filename}`,
   })
     .then((processedFilepath) => {
       const processedFilename = getFilenameFromPath(processedFilepath);
 
       if (SHOULD_GET_TRANSCRIPT) {
-        getTranscriptForFile(processedFilename).then((transcript) => {
-          handleUpdateDataEntry({ dataEntry, transcript, processedFilename });
+        return getTranscriptForFile(processedFilename).then((transcript) => {
+          return handleUpdateDataEntry({
+            dataEntry,
+            transcript,
+            processedFilename,
+          });
         });
       } else {
-        handleUpdateDataEntry({ dataEntry, processedFilename });
+        return handleUpdateDataEntry({ dataEntry, processedFilename });
       }
     })
     .catch((e) => {

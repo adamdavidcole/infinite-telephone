@@ -17,7 +17,15 @@ export function addDataEntryAPI(dataEntry) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(dataEntry),
-  });
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (!data.ok) {
+        throw new Error("Error adding data entry for: ", dataEntry);
+      }
+
+      return data.dataEntry;
+    });
 }
 
 export function uploadFileAPI({ blob, filename }) {

@@ -56,8 +56,10 @@ if (process.env.NODE_ENV === "production") {
 
 app.post("/add_data_entry", (req, res) => {
   const dataEntry = req.body;
-  addDataEntry(dataEntry);
-  res.send({ ok: true });
+  addDataEntry(dataEntry).then((addedDataEntry) => {
+    console.log("data entry added: ", addedDataEntry);
+    res.send({ ok: true, dataEntry: addedDataEntry });
+  });
 });
 
 app.post(

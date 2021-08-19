@@ -46,15 +46,19 @@ export default function RecordPage() {
     return "rgb(" + r + "," + g + "," + b + ")";
   }
 
-  // Effects
-  useEffect(() => {
-    getInitialDataAPI()
+  const fetchAppData = useCallback(() => {
+    return getInitialDataAPI()
       .then((res) => {
         console.log("Initial data:", res);
         setData(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
+
+  // Effects
+  useEffect(() => {
+    fetchAppData();
+  }, [fetchAppData]);
 
   useEffect(() => {
     audioRecorderRef.current.initialize();
@@ -65,11 +69,12 @@ export default function RecordPage() {
     ({ timestamp, filename }) => {
       const dataEntry = { timestamp, filename };
 
-      const nextData = [...data];
-      nextData.push(dataEntry);
-      setData(nextData);
-
-      addDataEntryAPI(dataEntry);
+      addDataEntryAPI(dataEntry).then((dataEntry) => {
+        const nextData = data ? [...data] : [];
+        nextData.push(dataEntry);
+        setData(nextData);
+        console.log("Updated data store with ", dataEntry);
+      });
     },
     [data]
   );
@@ -160,6 +165,7 @@ export default function RecordPage() {
         onAudioEnded={onAudioEnded}
         audioFilenameAsMp3={audioFilenameAsMp3}
         shadowRGB={getRGB()}
+        fetchAppData={fetchAppData}
       />
 
       {audioFilenameAsMp3 && (
