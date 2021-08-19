@@ -29,15 +29,22 @@ function callSpeechToTextAPI(filename) {
   const recognizeParams = {
     audio: fs.createReadStream(`./files/${filename}`),
     contentType,
+    maxAlternatives: 1,
+    interimResults: false,
   };
 
   return speechToText
     .recognize(recognizeParams)
     .then((speechRecognitionResults) => {
       console.log(JSON.stringify(speechRecognitionResults, null, 2));
-      const { results, result_index } = speechRecognitionResults.result;
-      const { transcript, confidence } = results[result_index].alternatives[0];
-      console.log("transcript", transcript, "confidence", confidence);
+      const { results } = speechRecognitionResults.result;
+
+      let transcript = "";
+      results.forEach((result) => {
+        const transcriptPart = result.alternatives[0].transcript;
+        transcript += " " + transcriptPart;
+      });
+      console.log("transcript", transcript);
       return transcript;
     })
     .catch((err) => {
