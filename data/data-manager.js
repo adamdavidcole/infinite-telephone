@@ -31,7 +31,6 @@ export async function addDataEntry(dataEntry) {
   const data = await getData();
   data.push(dataEntry);
 
-  console.log("db.data update", data);
   await db.write();
 
   return processDataEntry(dataEntry);
@@ -41,6 +40,7 @@ async function handleUpdateDataEntry({
   dataEntry,
   transcript,
   processedFilename,
+  duration,
 }) {
   const { timestamp } = dataEntry;
   console.log(
@@ -68,6 +68,7 @@ async function handleUpdateDataEntry({
     ...existingDataEntry,
     transcript,
     processedFilename,
+    duration,
   };
 
   data[existingDataEntryIndex] = nextDataEntry;
@@ -86,7 +87,7 @@ function processDataEntry(dataEntry) {
   return processAudio({
     inputFilename: `./files/${filename}`,
   })
-    .then((processedFilepath) => {
+    .then(({ processedFilepath, duration }) => {
       const processedFilename = getFilenameFromPath(processedFilepath);
 
       if (SHOULD_GET_TRANSCRIPT) {
@@ -95,10 +96,15 @@ function processDataEntry(dataEntry) {
             dataEntry,
             transcript,
             processedFilename,
+            duration,
           });
         });
       } else {
-        return handleUpdateDataEntry({ dataEntry, processedFilename });
+        return handleUpdateDataEntry({
+          dataEntry,
+          processedFilename,
+          duration,
+        });
       }
     })
     .catch((e) => {

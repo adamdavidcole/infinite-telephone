@@ -1,5 +1,6 @@
 import ffmpeg from "fluent-ffmpeg";
 import normalize from "ffmpeg-normalize";
+
 import _ from "lodash";
 
 function getExtension(filepath) {
@@ -14,6 +15,21 @@ export function removeExtension(filepath) {
 
 export function getFilenameFromPath(filepath) {
   return _.last(filepath.split("/"));
+}
+
+function getFileDetails(pathToFile) {
+  return new Promise((resolve, reject) => {
+    ffmpeg.ffprobe(pathToFile, function (err, metadata) {
+      if (err) {
+        console.error("getDuration error: ", err);
+        reject(err);
+      }
+
+      const duration = parseFloat(metadata?.format?.duration) * 1000;
+
+      resolve({ processedFilepath: pathToFile, duration });
+    });
+  });
 }
 
 function convertToMp3({ inputFilename }) {
@@ -83,6 +99,8 @@ export default function processAudio({ inputFilename }) {
   }).then((filename) => {
     return convertToMp3({
       inputFilename: normalizedOutputFilename,
+    }).then((processedFilename) => {
+      return getFileDetails(processedFilename);
     });
   });
 }

@@ -36,11 +36,6 @@ app.use(express.static("data"));
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 // ROUTES
-app.get("/express_backend", (req, res) => {
-  console.log("hit server");
-  res.send({ express: "YOUR EXPRESS BACKEND IS CONNECTED TO REACT" });
-});
-
 app.get("/get_initial_data", async (req, res) => {
   const data = await getData();
   res.send({ data });
@@ -57,7 +52,7 @@ if (process.env.NODE_ENV === "production") {
 app.post("/add_data_entry", (req, res) => {
   const dataEntry = req.body;
   addDataEntry(dataEntry).then((addedDataEntry) => {
-    console.log("data entry added: ", addedDataEntry);
+    console.log("data entry added and processed: ", addedDataEntry);
     res.send({ ok: true, dataEntry: addedDataEntry });
   });
 });

@@ -49,13 +49,8 @@ export default function RecordPage() {
   const fetchAppData = useCallback(() => {
     return getInitialDataAPI()
       .then((res) => {
-        const data = res.data;
-        console.log(
-          "Visualization-Page: fetched initial data with length: ",
-          data && data.length
-        );
-
-        setData(data);
+        console.log("Initial data:", res);
+        setData(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -72,7 +67,7 @@ export default function RecordPage() {
   // HANDLERS
   const onFileUploadSuccess = useCallback(
     ({ timestamp, filename }) => {
-      const dataEntry = { timestamp, filename };
+      const dataEntry = { timestamp, filename, id: timestamp };
 
       addDataEntryAPI(dataEntry).then((dataEntry) => {
         const nextData = data ? [...data] : [];
