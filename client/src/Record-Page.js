@@ -76,7 +76,7 @@ export default function RecordPage() {
 
   function getMostRecentAudioFile() {
     const mostRecentRecording = last(data);
-    const mostRecentAudioFilename = mostRecentRecording?.filename;
+    const mostRecentAudioFilename = mostRecentRecording?.processedFilename;
 
     return mostRecentAudioFilename;
   }
@@ -144,10 +144,8 @@ export default function RecordPage() {
   }, [onFileUploadSuccess]);
 
   const audioFilename = getMostRecentAudioFile();
-  // const audioFileExtension = audioFilename?.split(".")[1];
-  const audioFilenameAsMp3 = audioFilename
-    ? `${audioFilename?.split(".")[0]}.mp3`
-    : null;
+  // TODO: fix
+  const audioFilenameAsMp3 = audioFilename;
 
   return (
     <div className="p-record_page">

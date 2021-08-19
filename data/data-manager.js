@@ -1,13 +1,17 @@
 import { Low, JSONFile } from "lowdb";
 import path, { join } from "path";
 import ffmpeg from "fluent-ffmpeg";
+import processAudio, {
+  removeExtension,
+  getFilenameFromPath,
+} from "./audio-processing.js";
 import _ from "lodash";
 
 import getTranscriptForFile from "../speech-to-text.js";
 
 const __dirname = path.resolve();
 
-const SHOULD_GET_TRANSCRIPT = false;
+const SHOULD_GET_TRANSCRIPT = true;
 
 const file = join(__dirname, "data/db.json");
 const adapter = new JSONFile(file);
@@ -53,11 +57,17 @@ function convert(input, output, callback) {
     .run();
 }
 
-async function handleTranscriptForDataEntry({ dataEntry, transcript }) {
+async function handleUpdateDataEntry({
+  dataEntry,
+  transcript,
+  processedFilename,
+}) {
   const { timestamp } = dataEntry;
   console.log(
     "Saving transcript for dataEntry: ",
     timestamp,
+    "; processedFilename: ",
+    processedFilename,
     "; transcript:",
     transcript
   );
@@ -77,6 +87,7 @@ async function handleTranscriptForDataEntry({ dataEntry, transcript }) {
   const nextDataEntry = {
     ...existingDataEntry,
     transcript,
+    processedFilename,
   };
 
   data[existingDataEntryIndex] = nextDataEntry;
@@ -87,24 +98,24 @@ async function handleTranscriptForDataEntry({ dataEntry, transcript }) {
 
 function processDataEntry(dataEntry) {
   const { filename } = dataEntry;
-  const mp3Filename = `${filename.split(".")[0]}.mp3`;
+  const filenameWithoutExt = removeExtension(filename);
+  // const mp3Filename = `${filename.split(".")[0]}.mp3`;
 
-  if (filename !== mp3Filename) {
-    convert(`./files/${filename}`, `./files/${mp3Filename}`, (err) => {
-      if (!err) {
-        console.log("conversion complete");
-        if (SHOULD_GET_TRANSCRIPT) {
-          getTranscriptForFile(mp3Filename).then((transcript) => {
-            handleTranscriptForDataEntry({ dataEntry, transcript });
-          });
-        }
+  processAudio({
+    inputFilename: `./files/${filename}`,
+  })
+    .then((processedFilepath) => {
+      const processedFilename = getFilenameFromPath(processedFilepath);
+
+      if (SHOULD_GET_TRANSCRIPT) {
+        getTranscriptForFile(processedFilename).then((transcript) => {
+          handleUpdateDataEntry({ dataEntry, transcript, processedFilename });
+        });
+      } else {
+        handleUpdateDataEntry({ dataEntry, processedFilename });
       }
+    })
+    .catch((e) => {
+      console.error("Error processing audio", e);
     });
-  } else {
-    if (SHOULD_GET_TRANSCRIPT) {
-      getTranscriptForFile(mp3Filename).then((transcript) => {
-        handleTranscriptForDataEntry({ dataEntry, transcript });
-      });
-    }
-  }
 }
