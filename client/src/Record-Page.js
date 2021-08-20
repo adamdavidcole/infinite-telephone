@@ -42,7 +42,7 @@ export default function RecordPage() {
   }, 50);
 
   function getRGB() {
-    const [r, g, b] = hslToRgb(headerShadowHue / 360, 1, 0.5);
+    const [r, g, b] = hslToRgb(headerShadowHue / 360, 1, 0.35);
     return "rgb(" + r + "," + g + "," + b + ")";
   }
 

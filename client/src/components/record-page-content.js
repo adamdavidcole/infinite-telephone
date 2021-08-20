@@ -92,7 +92,7 @@ function RecordingContent({
   stopRecording,
   transitionToNextState,
 }) {
-  const recordingDuration = 30;
+  const recordingDuration = 60;
   const processingRef = useRef();
   const sketchRef = useRef();
   const [countdown, setCountdown] = useState(recordingDuration);
