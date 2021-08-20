@@ -46,6 +46,10 @@ export function getConsecutiveWordCounts(id) {
   return dataStore?.[id]?.consecutiveWordCounts;
 }
 
+export function getDurationById(id) {
+  return dataStore?.[id]?.duration;
+}
+
 export function getNextId(id) {
   return dataStore?.[id]?.nextAudioId;
 }

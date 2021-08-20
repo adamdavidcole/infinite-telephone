@@ -1,9 +1,13 @@
 import { first, nth } from "lodash";
-import { getAudioFilenameById } from "../../data/data-processor.js";
+import {
+  getAudioFilenameById,
+  getDurationById,
+} from "../../data/data-processor.js";
 import ANIMATION_STATUS from "../../utilities/animation-status";
 
 const { BEFORE_ANIMATION, ANIMATING, AFTER_ANIMATION } = ANIMATION_STATUS;
-const ANIMATION_DURATION = 10000;
+const MAX_ANIMATION_DURATION = 12000;
+const MIN_ANIMATION_DURATION = 8000;
 
 export default class SceneManager {
   constructor({ wordStrips, audioManager }) {
@@ -22,18 +26,36 @@ export default class SceneManager {
   startAnimation(index) {
     console.log("SceneManager: Starting animation for", index);
     const animatingWordStrip = nth(this.wordStrips, index);
+
     if (!animatingWordStrip) return;
+
+    const id = animatingWordStrip.id;
+    const duration = getDurationById(id) || MAX_ANIMATION_DURATION;
+    const maxAnimationDuration = Math.min(duration, MAX_ANIMATION_DURATION);
+    const minimumAnimationDuration = Math.min(duration, MIN_ANIMATION_DURATION);
+
+    const animationDuration = Math.floor(
+      Math.random() * (maxAnimationDuration - minimumAnimationDuration + 1) +
+        minimumAnimationDuration
+    );
+
+    console.log(
+      "animationDuration",
+      animationDuration,
+      "duration",
+      duration,
+      "maxAnimationDuration",
+      maxAnimationDuration
+    );
 
     const animationState = {
       animationStatus: ANIMATING,
       animationStartTime: Date.now(),
-      animationDuration: ANIMATION_DURATION,
+      animationDuration,
     };
     this.animationStateById[index] = animationState;
 
     animatingWordStrip?.startAnimation(animationState);
-
-    const id = animatingWordStrip.id;
     this.audioManager.beginAudioById(id);
   }
 
