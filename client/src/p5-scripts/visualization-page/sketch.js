@@ -149,7 +149,7 @@ let sketch = (p, { audioData, useTestAudio }) => {
     p.noStroke();
     p.fill(255);
     p.textSize(32);
-    p.text(p.round(p.frameRate()), 10, 30);
+    // p.text(p.round(p.frameRate()), 10, 30);
 
     wordStrips.forEach((wordStrip) => {
       wordStrip.draw(p);
