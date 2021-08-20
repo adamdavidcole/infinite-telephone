@@ -2,8 +2,14 @@ import express from "express";
 import multer from "multer";
 import path, { join } from "path";
 import dotenv from "dotenv";
+import AWS from "aws-sdk";
 
-import { getData, initialize, addDataEntry } from "./data/data-manager.js";
+import {
+  getData,
+  initialize,
+  addAndProcessDataEntry,
+  processTranscriptForDataEntry,
+} from "./data/data-manager.js";
 
 dotenv.config();
 
@@ -51,10 +57,15 @@ if (process.env.NODE_ENV === "production") {
 
 app.post("/add_data_entry", (req, res) => {
   const dataEntry = req.body;
-  addDataEntry(dataEntry).then((addedDataEntry) => {
-    console.log("data entry added and processed: ", addedDataEntry);
-    res.send({ ok: true, dataEntry: addedDataEntry });
-  });
+  addAndProcessDataEntry(dataEntry)
+    .then((processedDataEntry) => {
+      console.log("data entry added and processed: ", processedDataEntry);
+      res.send({ ok: true, dataEntry: processedDataEntry });
+      return processedDataEntry;
+    })
+    .then((processedDataEntry) =>
+      processTranscriptForDataEntry(processedDataEntry)
+    );
 });
 
 app.post(

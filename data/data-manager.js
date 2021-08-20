@@ -5,6 +5,7 @@ import processAudio, {
   removeExtension,
   getFilenameFromPath,
 } from "./audio-processing.js";
+import { uploadFileToS3 } from "./storage.js";
 import _ from "lodash";
 
 import getTranscriptForFile from "../speech-to-text.js";
@@ -27,7 +28,7 @@ export async function getData() {
   return db.data;
 }
 
-export async function addDataEntry(dataEntry) {
+export async function addAndProcessDataEntry(dataEntry) {
   const data = await getData();
   data.push(dataEntry);
 
@@ -66,17 +67,34 @@ async function handleUpdateDataEntry({
   const existingDataEntry = data[existingDataEntryIndex];
   const nextDataEntry = {
     ...existingDataEntry,
-    transcript,
-    processedFilename,
-    duration,
   };
+  if (transcript) nextDataEntry.transcript = transcript;
+  if (processedFilename) nextDataEntry.processedFilename = processedFilename;
+  if (duration) nextDataEntry.duration = duration;
 
   data[existingDataEntryIndex] = nextDataEntry;
+
   await db.write();
 
   console.log("DB update for dataEntry", timestamp);
 
   return nextDataEntry;
+}
+
+export function processTranscriptForDataEntry(dataEntry) {
+  if (!SHOULD_GET_TRANSCRIPT) return Promise.resolve();
+
+  const { processedFilename } = dataEntry;
+  if (!processedFilename) {
+    console.warn(
+      "processTranscriptForDataEntry: no processedFilename on data entry"
+    );
+    return;
+  }
+
+  return getTranscriptForFile(processedFilename).then((transcript) => {
+    return handleUpdateDataEntry({ dataEntry, transcript });
+  });
 }
 
 function processDataEntry(dataEntry) {
@@ -90,22 +108,18 @@ function processDataEntry(dataEntry) {
     .then(({ processedFilepath, duration }) => {
       const processedFilename = getFilenameFromPath(processedFilepath);
 
-      if (SHOULD_GET_TRANSCRIPT) {
-        return getTranscriptForFile(processedFilename).then((transcript) => {
-          return handleUpdateDataEntry({
-            dataEntry,
-            transcript,
-            processedFilename,
-            duration,
-          });
-        });
-      } else {
-        return handleUpdateDataEntry({
-          dataEntry,
-          processedFilename,
-          duration,
-        });
-      }
+      uploadFileToS3({
+        filepath: processedFilepath,
+        filename: processedFilename,
+      }).catch((err) => {
+        console.err("AWS:error uploading file to s3", err);
+      });
+
+      return handleUpdateDataEntry({
+        dataEntry,
+        processedFilename,
+        duration,
+      });
     })
     .catch((e) => {
       console.error("Error processing audio", e);

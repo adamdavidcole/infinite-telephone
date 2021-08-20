@@ -1,6 +1,6 @@
 import stem from "wink-porter2-stemmer";
 import mostCommonWords from "./most-common-words.json";
-import { isEmpty } from "lodash";
+import { isEmpty, isUndefined } from "lodash";
 
 //
 /**
@@ -81,16 +81,33 @@ function getNormalizedWords(text) {
   return words;
 }
 
+function sanitizeData(data) {
+  if (!data) return [];
+
+  return data.filter((dataEntry) => {
+    const { id, processedFilename, transcript } = dataEntry || {};
+
+    return (
+      !isUndefined(id) &&
+      !isUndefined(processedFilename) &&
+      !isUndefined(transcript)
+    );
+  });
+}
+
 export function processData(allAudioData) {
+  // strip invalid entires
+  const sanitizedData = sanitizeData(allAudioData);
+
   // process basic raw data
-  for (let i = 0; i < allAudioData.length; i++) {
-    const prevAudioData = i > 0 ? allAudioData[i - 1] : null;
+  for (let i = 0; i < sanitizedData.length; i++) {
+    const prevAudioData = i > 0 ? sanitizedData[i - 1] : null;
     const nextAudioData =
-      i < allAudioData.length - 1 ? allAudioData[i + 1] : null;
+      i < sanitizedData.length - 1 ? sanitizedData[i + 1] : null;
 
     const prevAudioId = prevAudioData?.id;
     const nextAudioId = nextAudioData?.id;
-    const audioData = allAudioData[i];
+    const audioData = sanitizedData[i];
     dataStore[audioData.id] = {
       ...audioData,
       prevAudioId,
@@ -101,7 +118,7 @@ export function processData(allAudioData) {
   }
 
   // process word counts per audio clip
-  const wordCountData = allAudioData.map((audioData) => {
+  const wordCountData = sanitizedData.map((audioData) => {
     const normalizedWords = getNormalizedWords(audioData.transcript);
     const wordCounts = {};
 

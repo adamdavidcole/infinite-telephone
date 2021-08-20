@@ -11,6 +11,7 @@ let audioVisualizerSketch = (p, props) => {
   let hasCalledOnEnded = false;
 
   p.preload = () => {
+    console.log("audioFilenameAsMp3", audioFilenameAsMp3);
     if (audioFilenameAsMp3) {
       song = p.loadSound(audioFilenameAsMp3);
     }
