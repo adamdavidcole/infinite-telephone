@@ -116,8 +116,8 @@ export default function RecordPage() {
 
     // audioRef.current.onended = stopPlayingAudio;
     audioRef.current.play();
-    // audioRef.current.pause();
-    // audioRef.current.currentTime = 0;
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
 
     setIsPlayingAudio(true);
   }

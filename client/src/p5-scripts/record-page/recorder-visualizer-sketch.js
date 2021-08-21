@@ -1,4 +1,5 @@
 import AudioRing from "./audio-ring";
+import isMobile from "../../utilities/is-mobile";
 
 let recorderVisualizerSketch = (p, props) => {
   const { height } = props;
@@ -11,14 +12,14 @@ let recorderVisualizerSketch = (p, props) => {
   p.setup = function () {
     p.createCanvas(p.windowWidth, height || p.windowHeight);
 
-    mic = new window.p5.AudioIn();
-    mic.start();
+    if (!isMobile()) {
+      mic = new window.p5.AudioIn();
+      mic.start();
 
-    console.log("recorderVisualizerSketch setup", timestamp);
-
-    amplitude = mic.amplitude;
-    amplitude.toggleNormalize(true);
-    amplitude.smooth(0.75);
+      amplitude = mic.amplitude;
+      amplitude.toggleNormalize(true);
+      amplitude.smooth(0.75);
+    }
 
     audioRing = new AudioRing({ p, amplitude });
   };
@@ -37,8 +38,10 @@ let recorderVisualizerSketch = (p, props) => {
   p.cleanup = () => {
     console.log("recorderVisualizerSketch: cleanup", timestamp);
 
-    mic.stop();
-    mic.disconnect();
+    if (!isMobile()) {
+      mic.stop();
+      mic.disconnect();
+    }
     p.remove();
   };
 };

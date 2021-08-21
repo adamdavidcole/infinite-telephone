@@ -131,7 +131,6 @@ function RecordingContent({
 
   useEffect(() => {
     if (!processingRef.current) return;
-    if (isMobile()) return;
 
     const height = processingRef.current.clientHeight;
 
