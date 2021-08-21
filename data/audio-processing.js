@@ -18,6 +18,7 @@ export function getFilenameFromPath(filepath) {
 }
 
 function getFileDetails(pathToFile) {
+  console.log("getFileDetails", pathToFile);
   return new Promise((resolve, reject) => {
     ffmpeg.ffprobe(pathToFile, function (err, metadata) {
       if (err) {
@@ -26,7 +27,6 @@ function getFileDetails(pathToFile) {
       }
 
       const duration = parseFloat(metadata?.format?.duration) * 1000;
-
       resolve({ processedFilepath: pathToFile, duration });
     });
   });
@@ -34,32 +34,35 @@ function getFileDetails(pathToFile) {
 
 function convertToMp3({ inputFilename }) {
   const filenameWithoutExt = removeExtension(inputFilename);
-  const outputFilename = `${filenameWithoutExt}-converted.mp3`;
+  const outputFilename = `${filenameWithoutExt}-c.mp3`;
 
   console.log("converting: ", inputFilename, "; to: ", outputFilename);
 
   return new Promise((resolve, reject) => {
     ffmpeg(inputFilename)
-      .audioFilters([
-        { filter: "highpass", options: "f=200" },
-        { filter: "lowpass", options: "f=3000" },
-        { filter: "silenceremove", options: `1:0:-35dB` },
-      ])
+      //   .audioFilters([
+      //     { filter: "highpass", options: "f=200" },
+      //     { filter: "lowpass", options: "f=3000" },
+      //     { filter: "silenceremove", options: `1:0:-35dB` },
+      //   ])
       .on("end", function () {
-        console.log("conversion ended");
+        console.log("conversion ended: ", outputFilename);
         resolve(outputFilename);
       })
       .on("error", function (err) {
         console.error("convertToMp3 err", err);
-        console.error("convertToMp3 error details: ", err.code, err.msg);
         reject(err);
       })
       .save(outputFilename);
   });
 }
 
-function normalizeAudio({ inputFilename, outputFilename }) {
+function normalizeAudio({ inputFilename }) {
+  const extension = getExtension(inputFilename);
+  const outputFilename = `${removeExtension(inputFilename)}-n.${extension}`;
+
   console.log("normalize audio", inputFilename, outputFilename);
+
   return new Promise((resolve, reject) => {
     normalize({
       input: inputFilename,
@@ -77,13 +80,38 @@ function normalizeAudio({ inputFilename, outputFilename }) {
       .then((normalized) => {
         // Normalized
         console.log("normalization successful:", outputFilename);
-        resolve(normalized);
+        resolve(outputFilename);
       })
       .catch((error) => {
         // Some error happened
-        console.err("Error normalizeAudio", error);
-        reject(err);
+        console.error("Error normalizeAudio", error);
+        reject(error);
       });
+  });
+}
+
+function applyAudioFilters({ inputFilename }) {
+  const extension = getExtension(inputFilename);
+  const outputFilename = `${removeExtension(inputFilename)}-f.${extension}`;
+
+  console.log("audio filters for ", inputFilename, outputFilename);
+
+  return new Promise((resolve, reject) => {
+    ffmpeg(inputFilename)
+      .audioFilters([
+        { filter: "highpass", options: "f=200" },
+        { filter: "lowpass", options: "f=3000" },
+        { filter: "silenceremove", options: `1:0:-35dB` },
+      ])
+      .on("end", function () {
+        console.log("audo filters ended: ", outputFilename);
+        resolve(outputFilename);
+      })
+      .on("error", function (err) {
+        console.error("applyAudioFilters err", err);
+        reject(err);
+      })
+      .save(outputFilename);
   });
 }
 
@@ -91,16 +119,16 @@ export default function processAudio({ inputFilename }) {
   const extension = getExtension(inputFilename);
   const normalizedOutputFilename = `${removeExtension(
     inputFilename
-  )}-normalized.${extension}`;
+  )}-n.${extension}`;
 
-  return normalizeAudio({
-    inputFilename,
-    outputFilename: normalizedOutputFilename,
-  }).then((filename) => {
-    return convertToMp3({
-      inputFilename: normalizedOutputFilename,
-    }).then((processedFilename) => {
-      return getFileDetails(processedFilename);
+  return convertToMp3({ inputFilename })
+    .then((convertedFilename) => {
+      return normalizeAudio({ inputFilename: convertedFilename });
+    })
+    .then((normalizedFilename) => {
+      return applyAudioFilters({ inputFilename: normalizedFilename });
+    })
+    .then((normalizedFilename) => {
+      return getFileDetails(normalizedFilename);
     });
-  });
 }

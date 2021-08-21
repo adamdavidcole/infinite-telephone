@@ -2,7 +2,6 @@ import express from "express";
 import multer from "multer";
 import path, { join } from "path";
 import dotenv from "dotenv";
-import AWS from "aws-sdk";
 
 import {
   getData,
@@ -59,13 +58,20 @@ app.post("/add_data_entry", (req, res) => {
   const dataEntry = req.body;
   addAndProcessDataEntry(dataEntry)
     .then((processedDataEntry) => {
+      if (!processedDataEntry) {
+        res.send({ ok: false });
+        throw new Error(`failed to add and process data entry: ${dataEntry}`);
+      }
       console.log("data entry added and processed: ", processedDataEntry);
       res.send({ ok: true, dataEntry: processedDataEntry });
       return processedDataEntry;
     })
     .then((processedDataEntry) =>
       processTranscriptForDataEntry(processedDataEntry)
-    );
+    )
+    .catch((err) => {
+      console.error("addAndProcessDataEntry caught error: ", err);
+    });
 });
 
 app.post(

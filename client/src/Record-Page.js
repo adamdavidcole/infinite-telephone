@@ -53,7 +53,10 @@ export default function RecordPage() {
     return getInitialDataAPI()
       .then((res) => {
         console.log("Initial data:", res);
-        setData(res.data);
+        const filteredData = res.data?.filter((dataEntry) => {
+          return dataEntry.processedFilename;
+        });
+        setData(filteredData);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -64,6 +67,7 @@ export default function RecordPage() {
   }, [fetchAppData]);
 
   useEffect(() => {
+    console.log("attempt to initialize audiorecorder");
     audioRecorderRef.current.initialize();
   }, []);
 
@@ -72,12 +76,16 @@ export default function RecordPage() {
     ({ timestamp, filename }) => {
       const dataEntry = { timestamp, filename, id: timestamp };
 
-      addDataEntryAPI(dataEntry).then((dataEntry) => {
-        const nextData = data ? [...data] : [];
-        nextData.push(dataEntry);
-        setData(nextData);
-        console.log("Updated data store with ", dataEntry);
-      });
+      addDataEntryAPI(dataEntry)
+        .then((dataEntry) => {
+          const nextData = data ? [...data] : [];
+          nextData.push(dataEntry);
+          setData(nextData);
+          console.log("Updated data store with ", dataEntry);
+        })
+        .catch((err) => {
+          console.error("Failed to addDataEntryAPI after file upload", err);
+        });
     },
     [data]
   );
@@ -106,8 +114,10 @@ export default function RecordPage() {
     console.log("playMostRecentAudio", mostRecentAudioFilename);
     console.log("audioRef.current", audioRef.current);
 
-    audioRef.current.onended = stopPlayingAudio;
+    // audioRef.current.onended = stopPlayingAudio;
     audioRef.current.play();
+    // audioRef.current.pause();
+    // audioRef.current.currentTime = 0;
 
     setIsPlayingAudio(true);
   }

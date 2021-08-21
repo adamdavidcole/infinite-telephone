@@ -37,7 +37,7 @@ class AudioRecorder {
       case "audio/ogg;codecs=opus":
         return "ogg";
       case "audio/mp4":
-        return "mp3";
+        return "m4a";
       default:
         return "";
     }
@@ -88,6 +88,7 @@ class AudioRecorder {
   }
 
   initialize() {
+    console.log("AudioRecorder: initializing");
     if (!this.isMediaSupported()) {
       console.warn("user media not supported, can't open stream");
       return;

@@ -27,6 +27,12 @@ function RestingContent({
   fetchAppData,
 }) {
   function onBeginClick() {
+    if (isMobile()) {
+      // big hack for niche mobile bug where p5 audio doesn't play so we duplicate the playing audio here
+      // without losing the visual amplitude effect
+      playMostRecentAudio();
+    }
+
     fetchAppData().then(() => {
       transitionToNextState();
     });

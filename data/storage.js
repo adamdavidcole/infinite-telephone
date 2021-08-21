@@ -1,8 +1,7 @@
 import fs from "fs";
 import AWS from "aws-sdk";
 
-const AWS_BUCKET_NAME = "infinite-telephone";
-let s3;
+export const AWS_BUCKET_NAME = "infinite-telephone";
 
 const DB_BACKUP_INTERVAL = 300000;
 
@@ -12,9 +11,10 @@ AWS.config.getCredentials(function (err) {
   // credentials not loaded
   else {
     console.log("AWS setup successfuly");
-    s3 = new AWS.S3({ apiVersion: "2006-03-01" });
   }
 });
+
+const s3 = new AWS.S3({ apiVersion: "2006-03-01" });
 
 export const uploadFileToS3 = ({ filepath, filename }) => {
   // Read content from the file

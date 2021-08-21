@@ -49,6 +49,8 @@ async function handleUpdateDataEntry({
     timestamp,
     "; processedFilename: ",
     processedFilename,
+    "; duration",
+    duration,
     "; transcript:",
     transcript
   );
@@ -84,7 +86,7 @@ async function handleUpdateDataEntry({
 export function processTranscriptForDataEntry(dataEntry) {
   if (!SHOULD_GET_TRANSCRIPT) return Promise.resolve();
 
-  const { processedFilename } = dataEntry;
+  const { processedFilename } = dataEntry || {};
   if (!processedFilename) {
     console.warn(
       "processTranscriptForDataEntry: no processedFilename on data entry"
@@ -99,20 +101,20 @@ export function processTranscriptForDataEntry(dataEntry) {
 
 function processDataEntry(dataEntry) {
   const { filename } = dataEntry;
-  const filenameWithoutExt = removeExtension(filename);
   // const mp3Filename = `${filename.split(".")[0]}.mp3`;
 
   return processAudio({
     inputFilename: `./files/${filename}`,
   })
     .then(({ processedFilepath, duration }) => {
+      console.log("processAudio final step");
       const processedFilename = getFilenameFromPath(processedFilepath);
 
       uploadFileToS3({
         filepath: processedFilepath,
         filename: processedFilename,
       }).catch((err) => {
-        console.err("AWS:error uploading file to s3", err);
+        console.error("AWS:error uploading file to s3", err);
       });
 
       return handleUpdateDataEntry({
