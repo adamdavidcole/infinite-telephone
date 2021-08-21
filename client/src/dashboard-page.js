@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getInitialDataAPI } from "./fetchers/fetchers";
 
-// const AUDIO_URL_PATH_PREFIX = "/";
 const AUDIO_URL_PATH_PREFIX =
   "https://infinite-telephone.s3.us-east-2.amazonaws.com/";
 
@@ -23,7 +22,6 @@ export default function DashboardPage() {
     return data?.map((dataEntry) => (
       <tr>
         <td>{dataEntry.id}</td>
-        <td>{dataEntry.timestamp}</td>
         <td>{dataEntry.filename}</td>
         <td>{dataEntry.processedFilename}</td>
         <td>
@@ -45,8 +43,7 @@ export default function DashboardPage() {
       <h1>Infitine Telephone Dashboard</h1>
       <table>
         <tr>
-          <th>id</th>
-          <th>timestamp</th>
+          <th>id/timestamp</th>
           <th>filename</th>
           <th>processed filename</th>
           <th>audio</th>

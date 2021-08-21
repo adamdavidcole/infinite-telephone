@@ -16,8 +16,8 @@ import RecordPageHeader from "./components/record-page-header";
 import RecordPageInstructions from "./components/record-page-instructions";
 import RecordPageContent from "./components/record-page-content";
 
-// const AUDIO_URL_PATH_PREFIX =
-//   "https://infinite-telephone.s3.us-east-2.amazonaws.com/";
+const AUDIO_URL_PATH_PREFIX =
+  "https://infinite-telephone.s3.us-east-2.amazonaws.com/";
 
 const AUDIO_FILE_TYPES = {
   webm: "audio/webm;codecs=opus",
@@ -93,8 +93,9 @@ export default function RecordPage() {
   function getMostRecentAudioFile() {
     const mostRecentRecording = last(data);
     const mostRecentAudioFilename = mostRecentRecording?.processedFilename;
+    if (!mostRecentAudioFilename) return;
 
-    return mostRecentAudioFilename;
+    return `${AUDIO_URL_PATH_PREFIX}${mostRecentAudioFilename}`;
   }
 
   const onAudioEnded = useCallback((callback) => {
