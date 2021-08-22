@@ -7,9 +7,9 @@ import DashboardPage from "./dashboard-page";
 import "modern-normalize/modern-normalize.css";
 import "./App.scss";
 
-function showRecordPage() {
+function showVisualizationPage() {
   const pathname = window.location.pathname;
-  return pathname === "/record";
+  return pathname === "/listen";
 }
 
 function showDashboardPage() {
@@ -18,15 +18,15 @@ function showDashboardPage() {
 }
 
 function App() {
-  if (showRecordPage()) {
-    return <RecordPage />;
-  }
-
   if (showDashboardPage()) {
     return <DashboardPage />;
   }
 
-  return <VisualizationPage />;
+  if (showVisualizationPage()) {
+    return <VisualizationPage />;
+  }
+
+  return <RecordPage />;
 }
 
 export default App;
