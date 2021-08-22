@@ -38,10 +38,14 @@ export default class WordStrip {
       this.rectWidth + padding,
       p.width - this.rectWidth - padding
     );
-    this.position = p.createVector(
-      this.p.width - LEFT_PADDING,
-      p.height - BOTTOM_PADDING
-    );
+    if (window.SHOULD_ANIMATE) {
+      this.position = p.createVector(
+        this.p.width - LEFT_PADDING,
+        p.height - BOTTOM_PADDING
+      );
+    } else {
+      this.position = p.createVector(x, p.height - BOTTOM_PADDING);
+    }
 
     this.wordCounts = { ...getWordCountsById(this.id) };
     this.wordsInCommon = getWordsInCommonById(this.id);

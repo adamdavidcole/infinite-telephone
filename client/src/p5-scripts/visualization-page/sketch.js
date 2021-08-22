@@ -5,6 +5,10 @@ import SceneManager from "./scene-manager";
 import AudioManager from "./audio-manager";
 
 const SAVE_PHOTO = false;
+const SHOULD_ANIMATE = true;
+window.SHOULD_ANIMATE = SHOULD_ANIMATE;
+
+const WIDTH_PER_STRIP = 300;
 
 let wordStrips = [];
 const wordStripMap = {};
@@ -14,14 +18,17 @@ let audioManager;
 
 let sketch = (p, { audioData, useTestAudio }) => {
   p.setup = function () {
-    if (SAVE_PHOTO) p.pixelDensity(4);
-    p.createCanvas(p.windowWidth, p.windowHeight);
-    p.background(0);
-
     processData(audioData);
-
     const sortedIds = getOrderedIds();
     const visibleBubbleCount = sortedIds.length;
+
+    if (SAVE_PHOTO) p.pixelDensity(4);
+    if (SHOULD_ANIMATE) {
+      p.createCanvas(p.windowWidth, p.windowHeight);
+    } else {
+      p.createCanvas(WIDTH_PER_STRIP * visibleBubbleCount, p.windowHeight);
+    }
+    p.background(0);
 
     sortedIds.forEach((id, index) => {
       const wordStrip = new WordStrip({
@@ -36,11 +43,18 @@ let sketch = (p, { audioData, useTestAudio }) => {
     });
 
     audioManager = new AudioManager({ useTestAudio });
-    sceneManager = new SceneManager({ wordStrips, audioManager });
+    if (SHOULD_ANIMATE) {
+      sceneManager = new SceneManager({ wordStrips, audioManager });
+    } else {
+      wordStrips.forEach((wordStrip) => {
+        wordStrip.initialize();
+        wordStrip.endAnimation();
+      });
+    }
   };
 
   p.draw = function () {
-    sceneManager.update();
+    sceneManager?.update();
 
     p.clear();
     p.background(0);

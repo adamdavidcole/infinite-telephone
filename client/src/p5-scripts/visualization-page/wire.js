@@ -24,7 +24,9 @@ export default class Wire {
     this.weight = weight;
 
     this.animationDuration = 10000;
-    this.animationStatus = BEFORE_ANIMATION;
+    this.animationStatus = window.SHOULD_ANIMATE
+      ? BEFORE_ANIMATION
+      : AFTER_ANIMATION;
     this.animationSpeed = p.random(0.8, 1.2);
 
     this.particles = [];
