@@ -7,8 +7,15 @@ import {
   getData,
   initialize,
   addAndProcessDataEntry,
+  deleteDataEntry,
+  resetData,
+  setData,
   processTranscriptForDataEntry,
 } from "./data/data-manager.js";
+import { loadDB } from "./data/storage.js";
+
+// whether to fetch DB from storage
+const FETCH_DB = true;
 
 dotenv.config();
 
@@ -83,6 +90,54 @@ app.post(
   }
 );
 
+app.post("/delete_data_entry", (req, res) => {
+  const id = req.id;
+  deleteDataEntry(id)
+    .then((data) => {
+      res.send({ ok: true, data });
+    })
+    .catch((e) => {
+      console.error("API error delete_data_entry", e);
+    });
+});
+
+app.post("/delete_data_entry", (req, res) => {
+  const id = req.id;
+  deleteDataEntry(id)
+    .then((data) => {
+      res.send({ ok: true, data });
+    })
+    .catch((e) => {
+      console.error("API error delete_data_entry", e);
+    });
+});
+
+app.post("/reset_data", (req, res) => {
+  resetData()
+    .then((data) => {
+      res.send({ ok: true, data });
+    })
+    .catch((e) => {
+      console.error("API error reset_data", e);
+    });
+});
+
+app.post("/set_data", (req, res) => {
+  const body = req.body;
+  setData(body)
+    .then((nextData) => {
+      res.send({ ok: true, data: nextData });
+    })
+    .catch((e) => {
+      console.error("API error set_data", e);
+    });
+});
+
 // DATABASE INITIALIZATION
-await initialize();
-console.log("data update", await getData());
+// await initialize();
+// console.log("data update", await getData());
+if (FETCH_DB) {
+  loadDB().then((initialDB) => {
+    console.log("Initial DB", initialDB);
+  });
+}

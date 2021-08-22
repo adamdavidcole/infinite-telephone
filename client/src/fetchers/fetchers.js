@@ -28,6 +28,62 @@ export function addDataEntryAPI(dataEntry) {
     });
 }
 
+export function deleteDataEntryAPI(id) {
+  return fetch("/delete_data_entry", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    id,
+  })
+    .then((response) => response.json())
+    .then((body) => {
+      if (!body.ok) {
+        throw new Error("Error deleting entry api for: ", id);
+      }
+
+      return body.data;
+    });
+}
+
+export function resetDataAPI() {
+  return fetch("/reset_data", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((body) => {
+      if (!body.ok) {
+        throw new Error("Error resetting data");
+      }
+
+      return body.data;
+    });
+}
+
+export function setDataAPI(newData) {
+  return fetch("/set_data", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: newData,
+  })
+    .then((response) => response.json())
+    .then((body) => {
+      if (!body.ok) {
+        throw new Error("Error deleting setting data for: ", newData);
+      }
+
+      return body.data;
+    });
+}
+
 export function uploadFileAPI({ blob, filename }) {
   // Create A file
   let audioFile = new File([blob], filename);

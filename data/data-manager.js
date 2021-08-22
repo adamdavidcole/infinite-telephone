@@ -5,7 +5,7 @@ import processAudio, {
   removeExtension,
   getFilenameFromPath,
 } from "./audio-processing.js";
-import { uploadFileToS3 } from "./storage.js";
+import { uploadFileToS3, backupDB, clearDB } from "./storage.js";
 import _ from "lodash";
 
 import getTranscriptForFile from "../speech-to-text.js";
@@ -13,10 +13,31 @@ import getTranscriptForFile from "../speech-to-text.js";
 const __dirname = path.resolve();
 
 const SHOULD_GET_TRANSCRIPT = true;
+const MIN_ENTRY_DURATION = 5000;
 
 const file = join(__dirname, "data/db.json");
 const adapter = new JSONFile(file);
 const db = new Low(adapter);
+
+function isCompleteDataEntry(dataEntry) {
+  const { id, processedFilename, transcript, duration } = dataEntry || {};
+  if (
+    _.isUndefined(id) ||
+    _.isUndefined(processedFilename) ||
+    _.isUndefined(transcript) ||
+    _.isUndefined(duration)
+  ) {
+    // console.log("isCompleteDataEntry invalid: undefined params", dataEntry);
+    return false;
+  }
+
+  if (duration < MIN_ENTRY_DURATION) {
+    // console.log("isCompleteDataEntry invalid: duration too short", duration);
+    return false;
+  }
+
+  return true;
+}
 
 // Read data from JSON file, this will set db.data content
 export async function initialize() {
@@ -37,6 +58,51 @@ export async function addAndProcessDataEntry(dataEntry) {
   return processDataEntry(dataEntry);
 }
 
+export async function deleteDataEntry(id) {
+  console.log("deleteEntry", id);
+  const data = await getData();
+  if (!data || !data.length) return;
+
+  const dataEntryToDeleteIndex = _.findIndex(
+    data,
+    (dataEntry) => dataEntry.id === id
+  );
+  data.splice(dataEntryToDeleteIndex, 1);
+
+  await db.write();
+  backupDB();
+
+  return data;
+}
+
+export async function resetData() {
+  const data = await getData();
+  if (!data || !data.length) return;
+
+  data.splice(0, data.length);
+  await db.write();
+
+  clearDB();
+
+  return data;
+}
+
+export async function setData(newData) {
+  if (!newData || !newData.length) return;
+
+  const data = await getData();
+  data.splice(0, data.length);
+
+  newData.forEach((dataEntry) => {
+    data.push(dataEntry);
+  });
+
+  await db.write();
+  backupDB();
+
+  return data;
+}
+
 async function handleUpdateDataEntry({
   dataEntry,
   transcript,
@@ -44,16 +110,6 @@ async function handleUpdateDataEntry({
   duration,
 }) {
   const { timestamp } = dataEntry;
-  console.log(
-    "Saving transcript for dataEntry: ",
-    timestamp,
-    "; processedFilename: ",
-    processedFilename,
-    "; duration",
-    duration,
-    "; transcript:",
-    transcript
-  );
 
   const data = await getData();
 
@@ -78,7 +134,10 @@ async function handleUpdateDataEntry({
 
   await db.write();
 
-  console.log("DB update for dataEntry", timestamp);
+  if (isCompleteDataEntry(nextDataEntry)) {
+    // backup to storage DB for complete valid entry updates
+    backupDB();
+  }
 
   return nextDataEntry;
 }
