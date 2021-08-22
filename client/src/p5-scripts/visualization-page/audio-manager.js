@@ -50,6 +50,7 @@ export default class AudioManager {
       if (audioObj.volume <= AUDIO_FADE_OUT_RATE) {
         clearInterval(interval);
         audioObj.volume = 0;
+        delete this.audioObjs[id];
         return;
       }
 

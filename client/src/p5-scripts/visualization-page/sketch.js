@@ -34,8 +34,6 @@ let sketch = (p, { audioData, useTestAudio }) => {
   const speechBubbles = [];
   const speechBubbleMap = {};
 
-  function initialize() {}
-
   p.setup = function () {
     if (SAVE_PHOTO) p.pixelDensity(4);
 

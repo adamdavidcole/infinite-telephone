@@ -1,9 +1,20 @@
+import { MAX_ANIMATION_DURATION } from "./scene-manager";
 export default class WordDot {
   constructor({ x, y, p, count, word }) {
     this.word = word;
     this.count = count;
 
     this.position = p.createVector(x, y);
+
+    const travelDistancePerAnimation = 100;
+    const frameRatePerSeconds = p.frameRate();
+    const animationDurationSeconds = MAX_ANIMATION_DURATION / 1000;
+    const totalFramesPerAnimation =
+      frameRatePerSeconds * animationDurationSeconds;
+
+    const distancePerFrame =
+      travelDistancePerAnimation / totalFramesPerAnimation;
+    const maxDistancePerFrame = distancePerFrame * 4;
 
     this.width = 4;
     this.height = Math.max(this.width * (this.count / 2), this.width);

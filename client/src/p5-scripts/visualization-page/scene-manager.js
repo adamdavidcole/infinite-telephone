@@ -6,7 +6,7 @@ import {
 import ANIMATION_STATUS from "../../utilities/animation-status";
 
 const { BEFORE_ANIMATION, ANIMATING, AFTER_ANIMATION } = ANIMATION_STATUS;
-const MAX_ANIMATION_DURATION = 12000;
+export const MAX_ANIMATION_DURATION = 12000;
 const MIN_ANIMATION_DURATION = 8000;
 
 export default class SceneManager {
@@ -16,18 +16,18 @@ export default class SceneManager {
     this.animationStatus = {};
 
     this.animationStateById = {};
-    // this.animationStatus = BEFORE_ANIMATION;
-    // this.animationStartTime = undefined;
 
-    this.currentlyAnimatingIndex = 1;
+    this.currentlyAnimatingIndex = 0;
     this.startAnimation(this.currentlyAnimatingIndex);
+  }
+
+  getWordStrip(index) {
+    return nth(this.wordStrips, index % this.wordStrips.length);
   }
 
   startAnimation(index) {
     console.log("SceneManager: Starting animation for", index);
-    const animatingWordStrip = nth(this.wordStrips, index);
-
-    if (!animatingWordStrip) return;
+    const animatingWordStrip = this.getWordStrip(index);
 
     const id = animatingWordStrip.id;
     const duration = getDurationById(id) || MAX_ANIMATION_DURATION;
@@ -53,7 +53,7 @@ export default class SceneManager {
       animationStartTime: Date.now(),
       animationDuration,
     };
-    this.animationStateById[index] = animationState;
+    this.animationStateById[index % this.wordStrips.length] = animationState;
 
     animatingWordStrip?.startAnimation(animationState);
     this.audioManager.beginAudioById(id);
@@ -61,14 +61,14 @@ export default class SceneManager {
 
   endAnimation(index) {
     console.log("SceneManager: Ending animation for", index);
-    const animatingWordStrip = nth(this.wordStrips, index);
+    const animatingWordStrip = this.getWordStrip(index);
     if (!animatingWordStrip) return;
 
     const animationState = {
       animationStatus: AFTER_ANIMATION,
       animationStartTime: undefined,
     };
-    this.animationStateById[index] = animationState;
+    this.animationStateById[index % this.wordStrips.length] = animationState;
 
     animatingWordStrip?.endAnimation(animationState);
 
@@ -78,7 +78,7 @@ export default class SceneManager {
 
   hasAnimationCompleted(index) {
     const { animationStatus, animationStartTime, animationDuration } =
-      this.animationStateById[index] || {};
+      this.animationStateById[index % this.wordStrips.length] || {};
     if (animationStatus === AFTER_ANIMATION) return true;
     if (!animationStartTime) return false;
 
@@ -87,11 +87,7 @@ export default class SceneManager {
   }
 
   update() {
-    const animatingWordStrip = nth(
-      this.wordStrips,
-      this.currentlyAnimatingIndex
-    );
-    if (!animatingWordStrip) return;
+    const animatingWordStrip = this.getWordStrip(this.currentlyAnimatingIndex);
 
     if (this.hasAnimationCompleted(this.currentlyAnimatingIndex)) {
       this.endAnimation(this.currentlyAnimatingIndex);

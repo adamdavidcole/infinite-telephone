@@ -64,6 +64,11 @@ export default class WordStrip {
   }
 
   initialize() {
+    this.wordDots = [];
+    this.wordDotMap = {};
+    this.links = [];
+    this.wires = [];
+
     this.generateWordDots();
     this.generateLinks();
   }
