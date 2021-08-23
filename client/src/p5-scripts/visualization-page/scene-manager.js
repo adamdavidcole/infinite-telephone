@@ -56,7 +56,7 @@ export default class SceneManager {
     this.animationStateById[index % this.wordStrips.length] = animationState;
 
     animatingWordStrip?.startAnimation(animationState);
-    this.audioManager.beginAudioById(id);
+    this.audioManager?.beginAudioById(id);
   }
 
   endAnimation(index) {
@@ -73,7 +73,7 @@ export default class SceneManager {
     animatingWordStrip?.endAnimation(animationState);
 
     const id = animatingWordStrip.id;
-    this.audioManager.beginAudioFadeOut(id);
+    this.audioManager?.beginAudioFadeOut(id);
   }
 
   hasAnimationCompleted(index) {

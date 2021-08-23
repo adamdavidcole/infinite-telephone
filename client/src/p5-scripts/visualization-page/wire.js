@@ -2,6 +2,7 @@ import { Vector } from "p5";
 import Particle from "./particle";
 import Spring from "./spring";
 import ANIMATION_STATUS from "../../utilities/animation-status.js";
+import getWordColor from "../../utilities/get-word-color";
 
 const PARTCILES_PER_STRING = 10;
 const k = 1;
@@ -89,9 +90,7 @@ export default class Wire {
   draw(p) {
     if (this.animationStatus === BEFORE_ANIMATION) return;
 
-    const r = p.pow(this.word.charCodeAt(0), 2) % 255;
-    const g = 60;
-    const b = p.pow(this.word.charCodeAt(1), 1) % 255;
+    const { r, g, b } = getWordColor(this.word);
 
     p.strokeWeight(this.weight);
     const stroke = p.map(this.weight, 1, 5, 100, 200);

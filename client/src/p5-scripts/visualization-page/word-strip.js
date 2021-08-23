@@ -127,10 +127,13 @@ export default class WordStrip {
       const count = this.wordCounts[word];
 
       const wordDot = new WordDot({
+        word,
         x: horizontalPosition,
         y: verticalPosition,
         count,
         p: this.p,
+        index: i,
+        totalWords: wordKeys.length,
       });
 
       this.wordDots.push(wordDot);
@@ -239,6 +242,25 @@ export default class WordStrip {
       const wordDot = this.wordDots[i];
       wordDot.draw(p);
     }
+
+    //  DRAW CURVE
+    // if (this.wordDots?.length > 3) {
+    //   p.noFill();
+    //   p.stroke(200);
+    //   p.strokeWeight(20);
+    //   const head = this.wordDots[0].position;
+    //   const tail = this.wordDots[this.getWordDotsToDrawCount()]?.position;
+    //   p.noFill();
+    //   p.beginShape();
+    //   p.curveVertex(head.x, head.y);
+    //   for (let i = 0; i < this.getWordDotsToDrawCount(); i++) {
+    //     const wordDot = this.wordDots[i];
+    //     const position = wordDot.position;
+    //     p.curveVertex(position.x, position.y);
+    //   }
+    //   p.curveVertex(tail?.x, tail?.y);
+    //   p.endShape();
+    // }
 
     // this.links.forEach((link) => link.draw(this.p));
     this.wires.forEach((wire) => wire.draw(this.p));

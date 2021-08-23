@@ -1,12 +1,14 @@
 import { nth } from "lodash";
 
 export default class AudioRing {
-  constructor({ size, amplitude, p }) {
-    this.position = p.createVector(p.width / 2, p.height / 2);
+  constructor({ size, amplitude, p, maxRadius, position }) {
+    this.position = position || p.createVector(p.width / 2, p.height / 2);
 
     this.phase = 0;
     this.zOff = 0;
     this.noiseMax = 3;
+
+    this.maxRadius = maxRadius || p.height * 0.65;
 
     this.amplitude = amplitude;
     this.amplitudeHistory = [];
@@ -64,7 +66,7 @@ export default class AudioRing {
 
         // const volMapped = p.map(vol, 0, 1, 0, 100);
 
-        let r = p.height * 0.65; //this.size * 4;
+        let r = this.maxRadius; //this.size * 4;
         // if (ringIndex === ringCount - 1) {
 
         // TRY

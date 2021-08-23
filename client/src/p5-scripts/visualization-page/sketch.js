@@ -3,9 +3,12 @@ import { processData } from "../../data/data-processor";
 import WordStrip from "./word-strip";
 import SceneManager from "./scene-manager";
 import AudioManager from "./audio-manager";
+import AudioRing from "../record-page/audio-ring";
 
-const SAVE_PHOTO = false;
-const SHOULD_ANIMATE = true;
+const SAVE_PHOTO = false; // prod = false
+const SHOULD_ANIMATE = true; // prod = true
+const SHOULD_PLAY_AUDIO = true; // prod = true
+const SHOW_AUDIO_RING = false; // prod = false
 window.SHOULD_ANIMATE = SHOULD_ANIMATE;
 
 const WIDTH_PER_STRIP = 300;
@@ -15,6 +18,8 @@ const wordStripMap = {};
 
 let sceneManager;
 let audioManager;
+
+let audioRing;
 
 let sketch = (p, { audioData, useTestAudio }) => {
   p.setup = function () {
@@ -42,7 +47,10 @@ let sketch = (p, { audioData, useTestAudio }) => {
       wordStripMap[id] = wordStrip;
     });
 
-    audioManager = new AudioManager({ useTestAudio });
+    if (SHOULD_PLAY_AUDIO) {
+      audioManager = new AudioManager({ useTestAudio });
+    }
+
     if (SHOULD_ANIMATE) {
       sceneManager = new SceneManager({ wordStrips, audioManager });
     } else {
@@ -51,13 +59,22 @@ let sketch = (p, { audioData, useTestAudio }) => {
         wordStrip.endAnimation();
       });
     }
+
+    if (SHOW_AUDIO_RING) {
+      const audioRingPosition = p.createVector(p.width / 2, 200);
+      audioRing = new AudioRing({
+        p,
+        maxRadius: 300,
+        position: audioRingPosition,
+      });
+    }
   };
 
   p.draw = function () {
     sceneManager?.update();
 
     p.clear();
-    p.background(0);
+    // p.background(0);
     p.blendMode(p.ADD);
 
     p.noStroke();
@@ -68,6 +85,8 @@ let sketch = (p, { audioData, useTestAudio }) => {
     wordStrips.forEach((wordStrip) => {
       wordStrip.draw(p);
     });
+
+    audioRing?.draw(p);
 
     if (SAVE_PHOTO) {
       p.noLoop();
