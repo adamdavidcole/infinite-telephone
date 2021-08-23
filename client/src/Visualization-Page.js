@@ -8,7 +8,7 @@ import { getInitialDataAPI } from "./fetchers/fetchers";
 import VisualizationPageIntroduction from "./components/visualization-page-introduction";
 import sketch from "./p5-scripts/visualization-page/sketch.js";
 
-const SHOULD_SHOW_START_PAGE = false;
+const SHOULD_SHOW_START_PAGE = true; // prod = true
 
 export default function VisualizationPage() {
   const [data, setData] = useState(null);
