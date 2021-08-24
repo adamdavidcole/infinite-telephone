@@ -12,6 +12,7 @@ import WordDot from "./word-dot";
 import Link from "./link";
 import Wire from "./wire";
 import ANIMATION_STATUS from "../../utilities/animation-status";
+import { SHOULD_ANIMATE } from "../../utilities/constants.js";
 
 const { BEFORE_ANIMATION, ANIMATING, AFTER_ANIMATION } = ANIMATION_STATUS;
 
@@ -38,9 +39,9 @@ export default class WordStrip {
       this.rectWidth + padding,
       p.width - this.rectWidth - padding
     );
-    if (window.SHOULD_ANIMATE) {
+    if (SHOULD_ANIMATE) {
       this.position = p.createVector(
-        this.p.width - LEFT_PADDING,
+        p.width - LEFT_PADDING,
         p.height - BOTTOM_PADDING
       );
     } else {

@@ -4,12 +4,11 @@ import WordStrip from "./word-strip";
 import SceneManager from "./scene-manager";
 import AudioManager from "./audio-manager";
 import AudioRing from "../record-page/audio-ring";
+import { SHOULD_ANIMATE } from "../../utilities/constants";
 
 const SAVE_PHOTO = false; // prod = false
-const SHOULD_ANIMATE = true; // prod = true
 const SHOULD_PLAY_AUDIO = true; // prod = true
 const SHOW_AUDIO_RING = false; // prod = false
-window.SHOULD_ANIMATE = SHOULD_ANIMATE;
 
 const WIDTH_PER_STRIP = 300;
 

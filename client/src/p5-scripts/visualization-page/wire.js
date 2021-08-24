@@ -3,6 +3,7 @@ import Particle from "./particle";
 import Spring from "./spring";
 import ANIMATION_STATUS from "../../utilities/animation-status.js";
 import getWordColor from "../../utilities/get-word-color";
+import { SHOULD_ANIMATE } from "../../utilities/constants";
 
 const PARTCILES_PER_STRING = 10;
 const k = 1;
@@ -25,9 +26,7 @@ export default class Wire {
     this.weight = weight;
 
     this.animationDuration = 10000;
-    this.animationStatus = window.SHOULD_ANIMATE
-      ? BEFORE_ANIMATION
-      : AFTER_ANIMATION;
+    this.animationStatus = SHOULD_ANIMATE ? BEFORE_ANIMATION : AFTER_ANIMATION;
     this.animationSpeed = p.random(0.8, 1.2);
 
     this.particles = [];

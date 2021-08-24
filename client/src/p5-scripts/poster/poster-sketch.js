@@ -1,7 +1,6 @@
 import Wire from "../visualization-page/wire";
 import AudioRing from "../record-page/audio-ring";
 
-window.SHOULD_ANIMATE = false;
 const SAMPLE_TRANSCRIPT =
   "something that I really love about telling stories with either a lot of my friends or just in a large group generally is that you'll start telling a story about something you did or something you experienced and then either someone will pick up on what you said or be inspired to tell their own stories and then the conversation will just go in this entirely New Direction and you'll end up in and then place at the end of the conversation that's nowhere near where you started and I think I was reading cuz you're like I want to tell my story but I think overall it's really cool how our conversations with each other can take these really long Meandering paths";
 
