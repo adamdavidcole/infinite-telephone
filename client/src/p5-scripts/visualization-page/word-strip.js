@@ -223,7 +223,7 @@ export default class WordStrip {
   }
 
   getWordDotsToDrawCount() {
-    const relativeSpeed = 1;
+    const relativeSpeed = 1.2;
     const wordDotsToDrawCount = Math.floor(
       this.getAnimationProgress() * this.wordDots.length * relativeSpeed
     );
