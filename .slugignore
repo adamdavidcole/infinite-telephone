@@ -1,0 +1,6 @@
+*.psd
+*.jpg
+*.png
+*.ttf
+/test
+/spec

@@ -30,6 +30,7 @@ export default function RecordPage() {
   const [data, setData] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [awaitingNewDataEntry, setAwaitingNewDataEntry] = useState(false);
   const audioRef = useRef();
   const [headerShadowHue, setHeaderShadowHue] = useState(0);
 
@@ -76,7 +77,7 @@ export default function RecordPage() {
     ({ timestamp, filename }) => {
       const dataEntry = { timestamp, filename, id: timestamp };
 
-      addDataEntryAPI(dataEntry)
+      return addDataEntryAPI(dataEntry)
         .then((dataEntry) => {
           const nextData = data ? [...data] : [];
           nextData.push(dataEntry);
@@ -150,11 +151,16 @@ export default function RecordPage() {
       const timestamp = Date.now();
       const filename = `audio-recording-${timestamp}.${fileExtension}`;
 
+      setAwaitingNewDataEntry(true);
+
       console.log(`Uploading ${filename}`);
       uploadFileAPI({ blob, filename })
         .then(() => {
           console.log(`Uploading ${filename} SUCCESS`);
           onFileUploadSuccess({ filename, timestamp });
+        })
+        .then(() => {
+          setAwaitingNewDataEntry(false);
         })
         .catch((e) => {
           console.log(`Uploading ${filename} FAILED`, e);
@@ -180,8 +186,8 @@ export default function RecordPage() {
         audioFilenameAsMp3={audioFilenameAsMp3}
         shadowRGB={getRGB()}
         fetchAppData={fetchAppData}
+        awaitingNewDataEntry={awaitingNewDataEntry}
       />
-
       {audioFilenameAsMp3 && (
         <audio
           controls

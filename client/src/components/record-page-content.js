@@ -25,8 +25,10 @@ function RestingContent({
   transitionToNextState,
   shadowRGB,
   fetchAppData,
+  awaitingNewDataEntry,
 }) {
   function onBeginClick() {
+    if (awaitingNewDataEntry) return;
     if (isMobile()) {
       // big hack for niche mobile bug where p5 audio doesn't play so we duplicate the playing audio here
       // without losing the visual amplitude effect
@@ -45,7 +47,7 @@ function RestingContent({
 
   return (
     <button type="button" onClick={onBeginClick}>
-      Begin
+      {awaitingNewDataEntry ? "Loading…" : "Begin"}
     </button>
   );
 }
@@ -223,6 +225,7 @@ export default function RecordPageContent({
   onAudioEnded,
   shadowRGB,
   fetchAppData,
+  awaitingNewDataEntry,
 }) {
   let recordPageContent = null;
 
@@ -234,6 +237,7 @@ export default function RecordPageContent({
           transitionToNextState={transitionToNextState}
           shadowRGB={shadowRGB}
           fetchAppData={fetchAppData}
+          awaitingNewDataEntry={awaitingNewDataEntry}
         />
       );
       break;
