@@ -1,6 +1,9 @@
 import Wire from "../visualization-page/wire";
 import AudioRing from "../record-page/audio-ring";
+import Camera from "./camera";
 
+const FOR_IMAGE_SAVE = false;
+const SHOULD_RECORD = false;
 const SAMPLE_TRANSCRIPT =
   "something that I really love about telling stories with either a lot of my friends or just in a large group generally is that you'll start telling a story about something you did or something you experienced and then either someone will pick up on what you said or be inspired to tell their own stories and then the conversation will just go in this entirely New Direction and you'll end up in and then place at the end of the conversation that's nowhere near where you started and I think I was reading cuz you're like I want to tell my story but I think overall it's really cool how our conversations with each other can take these really long Meandering paths";
 
@@ -18,6 +21,8 @@ const PosterSketch = (p) => {
   const SUBTITLE_FONT_SIZE = 30;
   const SUBTITLE = "all are invited to join the conversation";
 
+  let camera;
+
   let Exo2Font, Exo2FontRegular, Exo2FontSemiBold;
   let canvas;
   let points;
@@ -33,8 +38,11 @@ const PosterSketch = (p) => {
 
   p.setup = () => {
     canvas = p.createCanvas(width, height, window.p5.RendererSVG);
-    p.pixelDensity(9);
+    p.pixelDensity(FOR_IMAGE_SAVE ? 9 : 2);
     p.background(17, 17, 17);
+
+    camera = new Camera(30, 15000, p);
+    camera.setup();
 
     points = Exo2Font.textToPoints(
       TITLE,
@@ -169,6 +177,10 @@ const PosterSketch = (p) => {
     points.forEach((point) => {
       p.circle(point.x, point.y, 1);
     });
+
+    if (SHOULD_RECORD) {
+      camera.record();
+    }
   };
 
   p.mouseClicked = () => {

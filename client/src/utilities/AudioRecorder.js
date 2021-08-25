@@ -95,6 +95,21 @@ class AudioRecorder {
     }
 
     navigator.mediaDevices
+      .enumerateDevices()
+      .then(function (devices) {
+        devices.forEach(function (device) {
+          console.log(
+            device.kind + ": " + device.label + " id = " + device.deviceId,
+            "total:",
+            JSON.stringify(device)
+          );
+        });
+      })
+      .catch(function (err) {
+        console.log(err.name + ": " + err.message);
+      });
+
+    navigator.mediaDevices
       .getUserMedia(this.constraints)
       .then(this.onSuccess, this.onError);
   }
