@@ -73,7 +73,7 @@ let sketch = (p, { audioData, useTestAudio }) => {
     sceneManager?.update();
 
     p.clear();
-    // p.background(0);
+    // p.background(17, 20);
     p.blendMode(p.ADD);
 
     p.noStroke();

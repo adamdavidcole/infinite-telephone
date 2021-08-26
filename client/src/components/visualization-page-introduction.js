@@ -22,12 +22,19 @@ export default function VisualizationPageIntroduction({ onBeginClick }) {
     <div className="p-visualization__introduction">
       <h1 style={headerStyle}>INFINITE TELEPHONE</h1>
       <p>
-        <strong>WELCOME.</strong> Maybe some description of the project,
-        purpose, and visualization metaphors go here? Maybe some description of
-        the project, purpose, and visualization metaphors go here? Maybe some
-        description of the project, purpose, and visualization metaphors go
-        here?
+        <strong>INFINITE TELEPHONE</strong> is an interactive, public art
+        installation that invites the public to join in one endless conversation
+        over the course of one day in New York City. Each experience moves this
+        unidirectional conversation forward infinitely, and in the process
+        connects us all in a multi-person stream of consciousness that elevates
+        our thoughts beyond our individual limits.
+        <br />
+        <br />
+        <strong>The following is a map</strong> of that conversation which gives
+        a sense of the people's connectedness and shows the way the conversation
+        flows, branches, collapses and evolves over time.
       </p>
+
       <button onClick={onBeginClick}>BEGIN</button>
     </div>
   );

@@ -19,16 +19,16 @@ export default function RecordPageHeader({ stateValue, shadowRGB }) {
     case RECORD_STATES.PRE_RECORDING:
     case RECORD_STATES.RECORDING:
     case RECORD_STATES.LISTEN:
-      headerText = <h1>Please Join the Conversation</h1>;
+      headerText = <h1>Join the Conversation</h1>;
       break;
     // case RECORD_STATES.LISTEN:
     //   headerText = <h1>Sit down one second, I want to tell you everything…</h1>;
     //   break;
     case RECORD_STATES.RECORDING_COMPLETE:
-      headerText = <h1>Thank You for Joining Our Conversation</h1>;
+      headerText = <h1>Thank You for Joining the Conversation</h1>;
       break;
     default:
-      headerText = <h1>Hello, we are missing a header for {stateValue}</h1>;
+      headerText = <h1>Join the Conversation</h1>;
   }
 
   const headerStyle = {
