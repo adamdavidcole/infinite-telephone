@@ -12,6 +12,8 @@ const SHOW_AUDIO_RING = false; // prod = false
 
 const WIDTH_PER_STRIP = 300;
 
+let canvas;
+
 let wordStrips = [];
 const wordStripMap = {};
 
@@ -28,9 +30,12 @@ let sketch = (p, { audioData, useTestAudio }) => {
 
     if (SAVE_PHOTO) p.pixelDensity(4);
     if (SHOULD_ANIMATE) {
-      p.createCanvas(p.windowWidth, p.windowHeight);
+      canvas = p.createCanvas(p.windowWidth, p.windowHeight);
     } else {
-      p.createCanvas(WIDTH_PER_STRIP * visibleBubbleCount, p.windowHeight);
+      canvas = p.createCanvas(
+        WIDTH_PER_STRIP * visibleBubbleCount,
+        p.windowHeight
+      );
     }
     p.background(0);
 
@@ -91,6 +96,11 @@ let sketch = (p, { audioData, useTestAudio }) => {
       p.noLoop();
       p.save(`audio-visualization-${Date.now()}.png`);
     }
+  };
+
+  p.mouseClicked = () => {
+    console.log("Save image");
+    p.save(canvas, "sketch-if.png");
   };
 };
 
