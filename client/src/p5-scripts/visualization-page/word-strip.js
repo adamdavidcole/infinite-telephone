@@ -57,6 +57,7 @@ export default class WordStrip {
 
     this.wordDots = [];
     this.wordDotMap = {};
+    this.wordDotAnimationRelativeSpeed = 1.2;
 
     this.links = [];
     this.wires = [];
@@ -199,6 +200,13 @@ export default class WordStrip {
         animationDuration: this.animationDuration,
       });
     });
+
+    // console.log("start word-strip animation", animationDuration);
+    this.wordDots.forEach((wordDot) => {
+      wordDot.setAnimationDuration(
+        animationDuration / this.wordDotAnimationRelativeSpeed
+      );
+    });
   }
 
   endAnimation() {
@@ -223,7 +231,7 @@ export default class WordStrip {
   }
 
   getWordDotsToDrawCount() {
-    const relativeSpeed = 1.2;
+    const relativeSpeed = this.wordDotAnimationRelativeSpeed;
     const wordDotsToDrawCount = Math.floor(
       this.getAnimationProgress() * this.wordDots.length * relativeSpeed
     );

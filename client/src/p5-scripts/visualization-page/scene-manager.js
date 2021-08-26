@@ -6,8 +6,8 @@ import {
 import ANIMATION_STATUS from "../../utilities/animation-status";
 
 const { BEFORE_ANIMATION, ANIMATING, AFTER_ANIMATION } = ANIMATION_STATUS;
-export const MAX_ANIMATION_DURATION = 45000;
-const MIN_ANIMATION_DURATION = 30000;
+export const MAX_ANIMATION_DURATION = 32000;
+const MIN_ANIMATION_DURATION = 27000;
 
 export default class SceneManager {
   constructor({ wordStrips, audioManager }) {

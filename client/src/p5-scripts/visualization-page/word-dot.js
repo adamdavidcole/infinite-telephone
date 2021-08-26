@@ -7,6 +7,8 @@ import ANIMATION_STATUS from "../../utilities/animation-status";
 
 const { BEFORE_ANIMATION, ANIMATING, AFTER_ANIMATION } = ANIMATION_STATUS;
 
+const TOTAL_HORIZONTAL_DISTANCE = 500;
+const FRAME_RATE_PER_SECOND = 55;
 export default class WordDot {
   constructor({ x, y, p, count, word, index, totalWords }) {
     this.word = word;
@@ -28,16 +30,8 @@ export default class WordDot {
     this.animationStatus = BEFORE_ANIMATION;
     this.animationStartTime = 0;
     this.animationDuration = 250;
-
-    const travelDistancePerAnimation = 100;
-    const frameRatePerSeconds = p.frameRate();
-    const animationDurationSeconds = MAX_ANIMATION_DURATION / 1000;
-    const totalFramesPerAnimation =
-      frameRatePerSeconds * animationDurationSeconds;
-
-    const distancePerFrame =
-      travelDistancePerAnimation / totalFramesPerAnimation;
-    const maxDistancePerFrame = distancePerFrame * 4;
+    this.horizontalDistance =
+      TOTAL_HORIZONTAL_DISTANCE - (p.width - this.position.x);
 
     this.width = 4;
     this.height = Math.max(this.width * (this.count / 2), this.width);
@@ -45,11 +39,34 @@ export default class WordDot {
     this.borderRadius = 2;
   }
 
-  startAnimation({
-    animationStartTime,
-    animationStatus,
-    animationDuration,
-  } = {}) {
+  setAnimationDuration(animationDuration) {
+    // console.log("setting animation duration", animationDuration);
+    this.animationDuration = animationDuration;
+    // console.log("this.animationDuration", this.animationDuration);
+  }
+
+  getHorizonatalShiftPerFrame() {
+    const pixelsPerMillis = this.horizontalDistance / this.animationDuration;
+    // console.log(
+    //   "pixelsPerMillis",
+    //   pixelsPerMillis,
+    //   "this.animationDuration",
+    //   this.animationDuration
+    // );
+    const framesPerMillis = FRAME_RATE_PER_SECOND / 1000;
+    const millisPerFrame = 1 / framesPerMillis;
+    // console.log(
+    //   "millisPerFrame",
+    //   millisPerFrame,
+    //   "this.p.frameRate",
+    //   this.p.frameRate()
+    // );
+    const pixelsPerFrame = pixelsPerMillis * millisPerFrame;
+    if (pixelsPerFrame <= 0 || pixelsPerFrame > 1000) return 0;
+    return pixelsPerFrame;
+  }
+
+  startAnimation() {
     this.animationStatus = ANIMATING;
     this.currPosition.x = this.position.x + this.p.random(-10, 10);
     this.currPosition.y = this.p.height + 1;
@@ -60,7 +77,8 @@ export default class WordDot {
   }
 
   update() {
-    this.position.x = this.position.x - Math.random() * 1.125;
+    const xJitter = this.p.map(Math.random(), 0, 1, -0.25, 0.25);
+    this.position.x = this.position.x - Math.random() * 0.5 + xJitter;
     this.position.y = this.position.y + (Math.random() - 0.5) / 10;
 
     if (this.animationStatus === ANIMATING) {

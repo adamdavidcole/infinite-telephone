@@ -26,7 +26,7 @@ export default function RecordPageInstructions({ stateValue }) {
             </li>
             <li>
               Press <strong>BEGIN RECORDING</strong> to join the conversation by
-              adding your response. It can be whatever comes to mind, a direct
+              adding your response. It can be whatever comes to mind: a direct
               answer to the previous message, a thought that passed through your
               mind while listening, anything at all…
             </li>
