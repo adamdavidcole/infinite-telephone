@@ -1,1 +1,1 @@
-export const SHOULD_ANIMATE = true; // prod = true
+export const SHOULD_ANIMATE = false; // prod = true

@@ -37,7 +37,7 @@ let sketch = (p, { audioData, useTestAudio }) => {
         p.windowHeight
       );
     }
-    p.background(0);
+    p.background(0, 0, 30);
 
     sortedIds.forEach((id, index) => {
       const wordStrip = new WordStrip({
@@ -78,7 +78,7 @@ let sketch = (p, { audioData, useTestAudio }) => {
     sceneManager?.update();
 
     p.clear();
-    // p.background(17, 20);
+    p.background(50, 35, 0);
     p.blendMode(p.ADD);
 
     p.noStroke();
@@ -99,8 +99,8 @@ let sketch = (p, { audioData, useTestAudio }) => {
   };
 
   p.mouseClicked = () => {
-    console.log("Save image");
-    p.save(canvas, "sketch-if.png");
+    // console.log("Save image");
+    // p.save(canvas, "sketch-if.png");
   };
 };
 

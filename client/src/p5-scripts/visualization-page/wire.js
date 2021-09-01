@@ -91,8 +91,8 @@ export default class Wire {
 
     const { r, g, b } = getWordColor(this.word);
 
-    p.strokeWeight(this.weight);
-    const stroke = p.map(this.weight, 1, 5, 100, 200);
+    p.strokeWeight(Math.min(this.weight * 1.25, 10));
+    const stroke = p.map(this.weight, 1, 5, 200, 255);
     p.stroke(r, g, b, stroke);
     p.noFill();
 

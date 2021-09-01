@@ -78,7 +78,7 @@ export default class WordDot {
 
   update() {
     const xJitter = this.p.map(Math.random(), 0, 1, -0.25, 0.25);
-    this.position.x = this.position.x - Math.random() * 0.5 + xJitter;
+    this.position.x = this.position.x - Math.random() * 0.3 + xJitter;
     this.position.y = this.position.y + (Math.random() - 0.5) / 10;
 
     if (this.animationStatus === ANIMATING) {

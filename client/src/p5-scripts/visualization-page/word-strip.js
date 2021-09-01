@@ -7,12 +7,14 @@ import {
   getAudioFilenameById,
 } from "../../data/data-processor.js";
 
-import { isUndefined, sortBy, takeRight, take, drop } from "lodash";
+import { isUndefined, sortBy, takeRight, take, drop, isNumber } from "lodash";
 import WordDot from "./word-dot";
 import Link from "./link";
 import Wire from "./wire";
 import ANIMATION_STATUS from "../../utilities/animation-status";
 import { SHOULD_ANIMATE } from "../../utilities/constants.js";
+
+const OUTSIDE_BOUNDS = -500;
 
 const { BEFORE_ANIMATION, ANIMATING, AFTER_ANIMATION } = ANIMATION_STATUS;
 
@@ -21,12 +23,13 @@ const BOTTOM_PADDING = 60;
 const LEFT_PADDING = 100;
 const WORD_DOT_PADDING = 5;
 
-const MAX_WORD_DOTS = 85;
+const MAX_WORD_DOTS = 125;
 export default class WordStrip {
   constructor({ p, id, visibleBubbleCount, index, wordStripMap }) {
     this.p = p;
     this.id = id;
     this.wordStripMap = wordStripMap;
+    this.index = index;
 
     this.rectWidth = 2;
     this.rectRadius = 2;
@@ -145,6 +148,17 @@ export default class WordStrip {
     });
   }
 
+  getHorizontalPosition() {
+    if (!this.wordDots || !this.wordDots.length) return;
+
+    return this.wordDots[0].position?.x;
+  }
+
+  isOutsideBounds() {
+    const horizontalPosition = this.getHorizontalPosition();
+    return horizontalPosition < OUTSIDE_BOUNDS;
+  }
+
   generateLinks(p) {
     const prevId = getPrevId(this.id);
     if (isUndefined(prevId)) return;
@@ -245,6 +259,10 @@ export default class WordStrip {
   }
 
   draw(p) {
+    if (this.isOutsideBounds()) {
+      return;
+    }
+
     this.update();
 
     for (let i = 0; i < this.getWordDotsToDrawCount(); i++) {

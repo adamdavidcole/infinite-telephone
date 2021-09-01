@@ -6,8 +6,9 @@ import {
 import ANIMATION_STATUS from "../../utilities/animation-status";
 
 const { BEFORE_ANIMATION, ANIMATING, AFTER_ANIMATION } = ANIMATION_STATUS;
-export const MAX_ANIMATION_DURATION = 32000;
-const MIN_ANIMATION_DURATION = 27000;
+export const MAX_ANIMATION_DURATION = 59000;
+const MIN_ANIMATION_DURATION = 55000;
+const MIN_FADE_TIME = 1000;
 
 export default class SceneManager {
   constructor({ wordStrips, audioManager }) {
@@ -34,13 +35,15 @@ export default class SceneManager {
     const maxAnimationDuration = Math.min(duration, MAX_ANIMATION_DURATION);
     const minimumAnimationDuration = Math.min(duration, MIN_ANIMATION_DURATION);
 
-    const animationDuration = Math.floor(
+    let animationDuration = Math.floor(
       Math.random() * (maxAnimationDuration - minimumAnimationDuration + 1) +
         minimumAnimationDuration
     );
 
+    animationDuration = animationDuration - MIN_FADE_TIME;
+
     console.log(
-      "animationDuration",
+      "STARTING ANIMATION: animationDuration",
       animationDuration,
       "duration",
       duration,

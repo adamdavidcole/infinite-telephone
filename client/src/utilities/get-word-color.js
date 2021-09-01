@@ -2,14 +2,14 @@ import hslToRgb from "./hsl-to-rgb";
 
 const wordColors = {};
 
-const HUE_INCREMENT = 2;
+const HUE_INCREMENT = 3;
 
-let currHue = 200;
-const HUE_MIN = 200;
-const HUE_MAX = 330;
+let currHue = 215;
+const HUE_MIN = 0;
+const HUE_MAX = 360;
 
 export default function getWordColor(word) {
-  if (!word) return { r: 100, g: 100, b: 100 };
+  if (!word) return { r: 40, g: 100, b: 100 };
 
   if (wordColors[word]) return wordColors[word];
 
