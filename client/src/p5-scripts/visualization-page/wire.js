@@ -5,8 +5,8 @@ import ANIMATION_STATUS from "../../utilities/animation-status.js";
 import getWordColor from "../../utilities/get-word-color";
 import { SHOULD_ANIMATE } from "../../utilities/constants";
 
-const PARTCILES_PER_STRING = 10;
-const k = 1;
+const PARTCILES_PER_STRING = 7;
+const k = 0.25;
 
 const ANIMATION_STEPS = {
   BEFORE_ANIMATION: "BEFORE_ANIMATION",
@@ -91,8 +91,8 @@ export default class Wire {
 
     const { r, g, b } = getWordColor(this.word);
 
-    p.strokeWeight(Math.min(this.weight * 1.25, 10));
-    const stroke = p.map(this.weight, 1, 5, 200, 255);
+    p.strokeWeight(Math.min(this.weight, 7));
+    const stroke = p.map(this.weight, 1, 5, 100, 255);
     p.stroke(r, g, b, stroke);
     p.noFill();
 

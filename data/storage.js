@@ -99,10 +99,10 @@ export function loadDB() {
 }
 
 // Backup DB every hour
-setInterval(() => {
-  try {
-    backupDB();
-  } catch (e) {
-    console.error("Error backing up DB in interval", e);
-  }
-}, DB_BACKUP_INTERVAL);
+// setInterval(() => {
+//   try {
+//     backupDB();
+//   } catch (e) {
+//     console.error("Error backing up DB in interval", e);
+//   }
+// }, DB_BACKUP_INTERVAL);

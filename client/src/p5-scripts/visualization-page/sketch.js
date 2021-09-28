@@ -4,15 +4,22 @@ import WordStrip from "./word-strip";
 import SceneManager from "./scene-manager";
 import AudioManager from "./audio-manager";
 import AudioRing from "../record-page/audio-ring";
+import Camera from "../poster/camera";
 import { SHOULD_ANIMATE } from "../../utilities/constants";
 
 const SAVE_PHOTO = false; // prod = false
 const SHOULD_PLAY_AUDIO = true; // prod = true
 const SHOW_AUDIO_RING = false; // prod = false
+const SHOULD_RECORD = true;
 
 const WIDTH_PER_STRIP = 300;
 
+const instagramWidth = 600;
+
 let canvas;
+let camera;
+const FPS = 60;
+const DURATION = 33000;
 
 let wordStrips = [];
 const wordStripMap = {};
@@ -30,14 +37,17 @@ let sketch = (p, { audioData, useTestAudio }) => {
 
     if (SAVE_PHOTO) p.pixelDensity(4);
     if (SHOULD_ANIMATE) {
-      canvas = p.createCanvas(p.windowWidth, p.windowHeight);
+      canvas = p.createCanvas(instagramWidth, instagramWidth);
     } else {
       canvas = p.createCanvas(
         WIDTH_PER_STRIP * visibleBubbleCount,
         p.windowHeight
       );
     }
-    p.background(0, 0, 30);
+    // p.background(0, 0, 30);
+
+    camera = new Camera(FPS, DURATION, p);
+    camera.setup();
 
     sortedIds.forEach((id, index) => {
       const wordStrip = new WordStrip({
@@ -78,7 +88,7 @@ let sketch = (p, { audioData, useTestAudio }) => {
     sceneManager?.update();
 
     p.clear();
-    p.background(50, 35, 0);
+    p.background(17, 17, 17 * 1.5);
     p.blendMode(p.ADD);
 
     p.noStroke();
@@ -91,6 +101,10 @@ let sketch = (p, { audioData, useTestAudio }) => {
     });
 
     audioRing?.draw(p);
+
+    if (SHOULD_RECORD) {
+      camera.record();
+    }
 
     if (SAVE_PHOTO) {
       p.noLoop();

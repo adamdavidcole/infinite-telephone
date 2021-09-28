@@ -3,7 +3,7 @@ import AudioRing from "../record-page/audio-ring";
 import Camera from "./camera";
 
 const FOR_IMAGE_SAVE = false;
-const SHOULD_RECORD = false;
+const SHOULD_RECORD = true;
 const SAMPLE_TRANSCRIPT =
   "something that I really love about telling stories with either a lot of my friends or just in a large group generally is that you'll start telling a story about something you did or something you experienced and then either someone will pick up on what you said or be inspired to tell their own stories and then the conversation will just go in this entirely New Direction and you'll end up in and then place at the end of the conversation that's nowhere near where you started and I think I was reading cuz you're like I want to tell my story but I think overall it's really cool how our conversations with each other can take these really long Meandering paths";
 
@@ -12,14 +12,14 @@ const PosterSketch = (p) => {
   const width = 1200;
   const height = width * aspectRatio;
 
-  const TITLE_FONT_SIZE = 104;
-  const TITLE_X_START = 75;
+  const TITLE_FONT_SIZE = 85;
+  const TITLE_X_START = 180;
   const TITLE_Y_START = height / 3;
   const TITLE = "INFINITE  TELEPHONE";
 
   const SUBTITLE_Y_START = (height * 3) / 4;
-  const SUBTITLE_FONT_SIZE = 30;
-  const SUBTITLE = "all are invited to join the conversation";
+  const SUBTITLE_FONT_SIZE = 40;
+  const SUBTITLE = "Coming Soon";
 
   let camera;
 
@@ -44,7 +44,7 @@ const PosterSketch = (p) => {
     camera = new Camera(30, 15000, p);
     camera.setup();
 
-    points = Exo2Font.textToPoints(
+    points = Exo2Font?.textToPoints(
       TITLE,
       TITLE_X_START,
       TITLE_Y_START,
@@ -56,7 +56,7 @@ const PosterSketch = (p) => {
     );
     const transcriptWords = SAMPLE_TRANSCRIPT.split(" ");
 
-    points.forEach((point, i) => {
+    points?.forEach((point, i) => {
       if (p.random() > 0.05) return;
 
       const randomIndex = Math.floor(p.random() * points.length);

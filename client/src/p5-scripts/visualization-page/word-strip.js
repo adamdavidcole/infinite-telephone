@@ -19,11 +19,11 @@ const OUTSIDE_BOUNDS = -500;
 const { BEFORE_ANIMATION, ANIMATING, AFTER_ANIMATION } = ANIMATION_STATUS;
 
 const TOP_PADDING = 20;
-const BOTTOM_PADDING = 60;
+const BOTTOM_PADDING = 20;
 const LEFT_PADDING = 100;
 const WORD_DOT_PADDING = 5;
 
-const MAX_WORD_DOTS = 125;
+const MAX_WORD_DOTS = 60;
 export default class WordStrip {
   constructor({ p, id, visibleBubbleCount, index, wordStripMap }) {
     this.p = p;
@@ -104,7 +104,7 @@ export default class WordStrip {
     const consecutiveWordCounts = getConsecutiveWordCounts(this.id);
     const prevConsecutiveWordCounts = getConsecutiveWordCounts(prevId);
 
-    const wordKeys = Object.keys(this.wordCounts);
+    let wordKeys = Object.keys(this.wordCounts);
 
     const sortedWordKeys = sortBy(wordKeys, (wordKey) => {
       const consecutiveWordCount = consecutiveWordCounts?.[wordKey] || 0;
@@ -115,14 +115,22 @@ export default class WordStrip {
       // return count;
     });
 
-    let shuffledWordKeys = this.shufflePart(sortedWordKeys, 0.5);
+    let shuffledWordKeys = this.shufflePart(sortedWordKeys, 0.75);
+
+    const wordCount = this.p.random(MAX_WORD_DOTS - 15, MAX_WORD_DOTS);
+    for (let i = shuffledWordKeys.length; i > wordCount; i--) {
+      const randPos = Math.floor(this.p.random(0, wordCount));
+      shuffledWordKeys.splice(randPos, 1);
+    }
+
     return shuffledWordKeys;
   }
 
   generateWordDots() {
     let wordKeys = this.getSortedWordKeys();
 
-    wordKeys = takeRight(wordKeys, MAX_WORD_DOTS);
+    // const wordCount = this.p.random(MAX_WORD_DOTS - 15, MAX_WORD_DOTS);
+    // wordKeys = takeRight(wordKeys, wordCount);
 
     let verticalPosition = this.position.y;
     let horizontalPosition = this.position.x;

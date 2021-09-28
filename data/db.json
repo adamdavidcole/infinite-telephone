@@ -1,186 +1,5 @@
 [
   {
-    "timestamp": 1629604306771,
-    "filename": "audio-recording-1629604306771.webm",
-    "id": 1629604306771,
-    "processedFilename": "audio-recording-1629604306771-c-n-f.mp3",
-    "duration": 12384,
-    "transcript": " we are testing production code  %HESITATION  and  you're seeing if %HESITATION persistence works across three loads "
-  },
-  {
-    "timestamp": 1629604672103,
-    "filename": "audio-recording-1629604672103.webm",
-    "id": 1629604672103,
-    "processedFilename": "audio-recording-1629604672103-c-n-f.mp3",
-    "duration": 10560,
-    "transcript": " okay starting test number two the microphones are not working  %HESITATION hernia steam a bit %HESITATION but doing okay for the most part "
-  },
-  {
-    "timestamp": 1629604748300,
-    "filename": "audio-recording-1629604748300.webm",
-    "id": 1629604748300,
-    "processedFilename": "audio-recording-1629604748300-c-n-f.mp3",
-    "duration": 12960,
-    "transcript": " right pretty cool we are loading information from you to the U. S. yeah it is definitely coming through so that's pretty dope  %HESITATION  right "
-  },
-  {
-    "timestamp": 1629608072379,
-    "filename": "audio-recording-1629608072379.webm",
-    "id": 1629608072379,
-    "processedFilename": "audio-recording-1629608072379-c-n-f.mp3",
-    "duration": 21384,
-    "transcript": " okay %HESITATION  I am testing some persistent stuff %HESITATION we just work on the dashboard to make sure that we can control the server there you are in case **** hits the fan %HESITATION just pretty cool and real income hopefully done writing server code for a while but you never know so here we go "
-  },
-  {
-    "timestamp": 1629608928728,
-    "filename": "audio-recording-1629608928728.webm",
-    "id": 1629608928728,
-    "processedFilename": "audio-recording-1629608928728-c-n-f.mp3",
-    "duration": 19512,
-    "transcript": " okay during a test  courting from bed on my recently deployed server %HESITATION  recall that the stuff is being saved to Amazon S. three %HESITATION  but we'll see if this test I'm doing right now works "
-  },
-  {
-    "timestamp": 1629671656248,
-    "filename": "audio-recording-1629671656248.m4a",
-    "id": 1629671656248
-  },
-  {
-    "timestamp": 1629672027519,
-    "filename": "audio-recording-1629672027519.m4a",
-    "id": 1629672027519,
-    "processedFilename": "audio-recording-1629672027519-c-n-f.mp3",
-    "duration": 21600,
-    "transcript": " okay we are recording again using a progressive web that he earned aren't pretty excited to see if this works this is the closest got into you  like actually functioning app like experience %HESITATION so fingers crossed that this uploads directly in the desert all just kill myself so that's that "
-  },
-  {
-    "timestamp": 1629756176949,
-    "filename": "audio-recording-1629756176949.m4a",
-    "id": 1629756176949,
-    "processedFilename": "audio-recording-1629756176949-c-n-f.mp3",
-    "duration": 40944,
-    "transcript": " okay we are recording on my new iPad mini %HESITATION very exciting if this doesn't work I will have to  simply give up because there's only so much you can do but I'm pretty stoked and I'm about to Preston recording although I tried it the sixty seconds we test the whole  communication pipeline %HESITATION but so far so good having crashed running smoothly thirty seconds remaining just a minute is quite a long time %HESITATION so I'm gonna keep chit chatting or I guess I want about now %HESITATION  good job buddy "
-  },
-  {
-    "timestamp": 1629758426396,
-    "filename": "audio-recording-1629758426396.m4a",
-    "id": 1629758426396,
-    "processedFilename": "audio-recording-1629758426396-c-n-f.mp3",
-    "duration": 27624,
-    "transcript": " I am testing recording with the microphone in Washington Square park to see if this works I'm not sure if anything is getting through  %HESITATION it  we are testing to find out for sure  %HESITATION don't know how to play audio at the same time but people deal with that problem next  okay test complete "
-  },
-  {
-    "timestamp": 1629865170197,
-    "filename": "audio-recording-1629865170197.webm",
-    "id": 1629865170197,
-    "processedFilename": "audio-recording-1629865170197-c-n-f.mp3",
-    "duration": 21480,
-    "transcript": " okay we're gonna record something longer than usual to test this awaiting new data entry  sealed something I just kind of wanted for a while %HESITATION and maybe now you can have it %HESITATION so  testing testing testing almost done  here we go okay "
-  },
-  {
-    "timestamp": 1629865583563,
-    "filename": "audio-recording-1629865583563.webm",
-    "id": 1629865583563,
-    "processedFilename": "audio-recording-1629865583563-c-n-f.mp3",
-    "duration": 12216,
-    "transcript": " getting recording doing really quick tests to see how this goes %HESITATION  one two three four five six seven eight nine ten  the okay and we are "
-  },
-  {
-    "timestamp": 1629865661779,
-    "filename": "audio-recording-1629865661779.webm",
-    "id": 1629865661779,
-    "processedFilename": "audio-recording-1629865661779-c-n-f.mp3",
-    "duration": 19176,
-    "transcript": " okay beginning recording I guess the microphone works now but no one knows why are one that's going to happen %HESITATION counting down to twenty seconds of audio to test this out rattling %HESITATION  and honestly distract ourselves from the microphone disaster of twenty twelve  okay yeah "
-  },
-  {
-    "timestamp": 1629869799455,
-    "filename": "audio-recording-1629869799455.m4a",
-    "id": 1629869799455,
-    "processedFilename": "audio-recording-1629869799455-c-n-f.mp3",
-    "duration": 11088,
-    "transcript": " okay we are testing the recording on external microphone going former top top top left to find out if this works or not okay testing testing "
-  },
-  {
-    "timestamp": 1629870324596,
-    "filename": "audio-recording-1629870324596.m4a",
-    "id": 1629870324596,
-    "processedFilename": "audio-recording-1629870324596-c-n-f.mp3",
-    "duration": 3816,
-    "transcript": " testing testing "
-  },
-  {
-    "timestamp": 1629871789392,
-    "filename": "audio-recording-1629871789392.m4a",
-    "id": 1629871789392,
-    "processedFilename": "audio-recording-1629871789392-c-n-f.mp3",
-    "duration": 22080,
-    "transcript": " okay I'm recording on mine  Bluetooth headset New Zealand never really heard from  the question is  hi there this will work at all or not okay  and we're all  lotus excessively yeah  according to plan "
-  },
-  {
-    "timestamp": 1629919559210,
-    "filename": "audio-recording-1629919559210.webm",
-    "id": 1629919559210,
-    "processedFilename": "audio-recording-1629919559210-c-n-f.mp3",
-    "duration": 6048,
-    "transcript": " testing a recording yes it's a nice weekend the thing is that this Mike is doing anything okay "
-  },
-  {
-    "timestamp": 1629919609779,
-    "filename": "audio-recording-1629919609779.webm",
-    "id": 1629919609779,
-    "processedFilename": "audio-recording-1629919609779-c-n-f.mp3",
-    "duration": 15504,
-    "transcript": " and I mean if it's gonna work %HESITATION  right so maybe like you be the ambient sound then I'll be rich recording my life story and then we'll see what happens I didn't pick up the over there though  I mean it's like man "
-  },
-  {
-    "timestamp": 1629923764763,
-    "filename": "audio-recording-1629923764763.m4a",
-    "id": 1629923764763,
-    "processedFilename": "audio-recording-1629923764763-c-n-f.mp3",
-    "duration": 9816,
-    "transcript": " we are testing recording on my iPad and apple store to see if the audio is picked up and what the general guidance okay "
-  },
-  {
-    "timestamp": 1629948191736,
-    "filename": "audio-recording-1629948191736.m4a",
-    "id": 1629948191736,
-    "processedFilename": "audio-recording-1629948191736-c-n-f.mp3",
-    "duration": 15864,
-    "transcript": " testing recording at night and washing square park to see if it picks up the audio okay %HESITATION it's pretty loud right now so it's a good test there's no outdoor music but %HESITATION I think it'll be a good proxy for what we're trying to "
-  },
-  {
-    "timestamp": 1629999179248,
-    "filename": "audio-recording-1629999179248.m4a",
-    "id": 1629999179248,
-    "processedFilename": "audio-recording-1629999179248-c-n-f.mp3",
-    "duration": 58920,
-    "transcript": " testing the recording in my living room hopefully this works because we're in pretty deep at this point  %HESITATION  it financially emotionally  we're about to risk our bodies and minds in this heat so hopefully it's all worth something %HESITATION  yeah they are what is art  we ask ourselves do we want this opener  the this might be like a huge box but it also does feel like I definitely feel private  I think we have the option yeah I got my breasts done recording well as I'm gonna make sure that it automatically cuts off at sixty seconds I'm gonna keep going  I think that maybe we should say like we can close it for you for privacy but you're  %HESITATION I **** forgot here I'll  I know but there's so much stuff with the Kerry okay it's fine we'll deal with that  read seven seconds so hopefully this works because I really don't want to play this again I have but it's been awhile "
-  },
-  {
-    "timestamp": 1630009174769,
-    "filename": "audio-recording-1630009174769.m4a",
-    "id": 1630009174769,
-    "processedFilename": "audio-recording-1630009174769-c-n-f.mp3",
-    "duration": 22680,
-    "transcript": " I'm doing my first flight test in Washington Square park we just carried about seven hundred pounds worth of chairs and tables %HESITATION which is all well and good %HESITATION now we've really just got to hope that this actually records because if it doesn't we way said about  two weeks and three thousand dollars worth of material collection so I'm gonna Preston according and hope for the best "
-  },
-  {
-    "timestamp": 1630009410936,
-    "filename": "audio-recording-1630009410936.m4a",
-    "id": 1630009410936,
-    "processedFilename": "audio-recording-1630009410936-c-n-f.mp3",
-    "duration": 16175.999999999998,
-    "transcript": " so I suppose people hear you I think I got to take one of these  yeah  right to restart  okay "
-  },
-  {
-    "timestamp": 1630009469207,
-    "filename": "audio-recording-1630009469207.m4a",
-    "id": 1630009469207,
-    "processedFilename": "audio-recording-1630009469207-c-n-f.mp3",
-    "duration": 24240,
-    "transcript": " I will give a free able because I don't want to seem an authentic %HESITATION the question to pose to you is are you from there they do that  productivity and like the hourly unit relative that productivity is decreasing what people are getting paid less for the same output theoretically because productivity is increasing  what %HESITATION to myself "
-  },
-  {
     "timestamp": 1630010085975,
     "filename": "audio-recording-1630010085975.m4a",
     "id": 1630010085975,
@@ -347,5 +166,98 @@
     "processedFilename": "audio-recording-1630019067366-c-n-f.mp3",
     "duration": 59304,
     "transcript": " so the person before me was talking about people who are %HESITATION acting so nonchalant that they are probably not that nonchalance and I think that that is  probably a much larger percentage of the population that we think is like how many of us are just  pretending or trying to make it baking it selling make it and how many of us actually believe that we are  AS amazing are strong or smart or charismatic as we think we are and I wonder if  should more people be  more nonchalant or sure more people be  %HESITATION  you know recognizing that maybe we are all as great as we think a little bit more humble "
+  },
+  {
+    "timestamp": 1630021251144,
+    "filename": "audio-recording-1630021251144.m4a",
+    "id": 1630021251144,
+    "processedFilename": "audio-recording-1630021251144-c-n-f.mp3",
+    "duration": 26424,
+    "transcript": " so the girl before me said that %HESITATION the product that people are acts nonchalant even when they're not really nonchalant and %HESITATION I think that that that action that thinking of trying to act nonchalant is seen as cool or whatever it's like destroying art or humanity or something I don't now %HESITATION but it's it's not a cool thing "
+  },
+  {
+    "timestamp": 1630022153859,
+    "filename": "audio-recording-1630022153859.m4a",
+    "id": 1630022153859,
+    "processedFilename": "audio-recording-1630022153859-c-n-f.mp3",
+    "duration": 60024,
+    "transcript": " never let  anyone  to put you down  you are the most important person  if you love  and fell  forget about it  go ahead  and try thanks  customer if I can say  for happiness  the reason you  nobody can make you happy if you are not at the expense of  I am a happy person  read you  I'm happiest  to leave the European leave me  I still be "
+  },
+  {
+    "timestamp": 1630022359943,
+    "filename": "audio-recording-1630022359943.m4a",
+    "id": 1630022359943,
+    "processedFilename": "audio-recording-1630022359943-c-n-f.mp3",
+    "duration": 32952,
+    "transcript": " hello hi  so it was hard it was hard to understand what you're saying but I I definitely agree I feel like if you're not happy within yourself then nobody else is going to make you happy so I'm actually in that path web giants who basically gets to know myself better is to get to see will like see what makes me happy so that I can be happy within and bring the happiness of somebody else and so my family  so yeah "
+  },
+  {
+    "timestamp": 1630022599235,
+    "filename": "audio-recording-1630022599235.m4a",
+    "id": 1630022599235,
+    "processedFilename": "audio-recording-1630022599235-c-n-f.mp3",
+    "duration": 41208,
+    "transcript": " hello stranger I'm so happy to hear you I'm hearing in this park full of good energy and cool people I'm from Colombia he never really awesome ad trip with my girlfriend and super in love with the CD and I we should have right now I have my cap between two in one year I come here to tell you something at N. Y. U. so we could be our partners in the future here in this park %HESITATION we can share some stories so be cocked to you and thank you for D. supports unity I'm pulling up for Columbia "
+  },
+  {
+    "timestamp": 1630022979759,
+    "filename": "audio-recording-1630022979759.m4a",
+    "id": 1630022979759,
+    "processedFilename": "audio-recording-1630022979759-c-n-f.mp3",
+    "duration": 35136,
+    "transcript": " J. E.  I'm co chair from Columbia so now I'm not watching darn square park I'm leaving postcards of mom pictures they can bite me so I'm leaving and it around New York so hope you fine wine normal  a lot of my book plus the currents %HESITATION  so let's see "
+  },
+  {
+    "timestamp": 1630023683578,
+    "filename": "audio-recording-1630023683578.m4a",
+    "id": 1630023683578,
+    "processedFilename": "audio-recording-1630023683578-c-n-f.mp3",
+    "duration": 18744,
+    "transcript": " hello my name is Rachel I have a minute to visit my sister in New York all the time and my favorite place to come as Washington Square park and I love that you can come here and be whoever you want to be in no one judges you and how creativity and this is really cool okay hi "
+  },
+  {
+    "timestamp": 1630025048762,
+    "filename": "audio-recording-1630025048762.m4a",
+    "id": 1630025048762
+  },
+  {
+    "timestamp": 1630026469123,
+    "filename": "audio-recording-1630026469123.m4a",
+    "id": 1630026469123,
+    "processedFilename": "audio-recording-1630026469123-c-n-f.mp3",
+    "duration": 45960,
+    "transcript": " hello  my name is Vera I'm from Moscow this is my third visit to your arm %HESITATION be doing  in theaters which is called a Lexus dealer in Moscow and %HESITATION so I used to have %HESITATION startup  these are my thing  I really liked your project because I like the idea of our people he's got one by one  what's on the mind in this meeting  also it's a beautiful evening in Washington Square  so  I hope everybody's  here S. I. B. as I am now  have a good one "
+  },
+  {
+    "timestamp": 1630027135256,
+    "filename": "audio-recording-1630027135256.m4a",
+    "id": 1630027135256,
+    "processedFilename": "audio-recording-1630027135256-c-n-f.mp3",
+    "duration": 28608,
+    "transcript": " hi Vera happy to hear that you're enjoying your time in the US and in Washington Square park I've always wanted to go to Russia every since I was a little girl watching Anastasia the cartoon and as always I know obviously it's pretty sad story but the when they're dancing around at the Saint Petersburg where I was like that's kind of the place to be so happy that you're enjoying the Washington Square park and hopefully one day all end up in a Russian square "
+  },
+  {
+    "timestamp": 1630027706699,
+    "filename": "audio-recording-1630027706699.m4a",
+    "id": 1630027706699,
+    "processedFilename": "audio-recording-1630027706699-c-n-f.mp3",
+    "duration": 59736,
+    "transcript": " the Russians were sounds pretty cool %HESITATION I'm  only  here for my second time in Washington Square park  my sister goes and why you  and it's actually pretty impressive there's so many people out here doing so many different things like a carnival like a fair or something  like I've just spent hours out here I feel like  and I and I mean by the looks of it like people do spend hours I  in the fountains on and live music's playing and  there's so many cool things to do and it's all free it's kind of crazy  %HESITATION  but you should pay the performers I feel like that's only fair  yeah hopefully after this I can walk around for like a couple more hours  and just see what happens  never been "
+  },
+  {
+    "timestamp": 1630027867603,
+    "filename": "audio-recording-1630027867603.m4a",
+    "id": 1630027867603,
+    "processedFilename": "audio-recording-1630027867603-c-n-f.mp3",
+    "duration": 59640,
+    "transcript": " I'm  the person before me was my brother he's visiting me for the first time in the three years that I've been at school here and you mentioned Russian squares which I have not really any idea what they are but I go to school here in the city and I'm really glad he's testing me I don't get to see him very often so it's nice to hear him talk about the place I go to school and you know what I've been calling home for the past four years %HESITATION  I really love him and I don't get cell not very often  so it's nice to be able to spend time with him here and know that he likes the area that I live in and thinks that it's interesting and thinks I'm interesting in what I'm studying in what I believe in what I find interesting and it's cool to share those things because we grew up together and he's only a year ahead of me in school not even two years older than me and my  but  I feel like we always grew up together and spend time together and it's nice to have him here and I missed him "
+  },
+  {
+    "timestamp": 1630028050863,
+    "filename": "audio-recording-1630028050863.m4a",
+    "id": 1630028050863,
+    "processedFilename": "audio-recording-1630028050863-c-n-f.mp3",
+    "duration": 57288,
+    "transcript": " he said the person before me whereas sharing a story about school and about her brother and about how much she loves %HESITATION her brother to be experiencing the same things that she's currently experiencing in the city and how they have %HESITATION similarities and the things that they like  and know what a basically picked up from that is  when we go to school  you know we go to a place where we think that we have found these found something that we want to do with our lives  and that  really what we want to do with our lives is  live  and what I mean by living is truly exploring the depths of love  what I eat what I really picked up was that "
   }
 ]
