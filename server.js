@@ -134,6 +134,7 @@ app.post("/set_data", (req, res) => {
 });
 
 // DATABASE INITIALIZATION
+
 // await initialize();
 // console.log("data update", await getData());
 if (FETCH_DB) {
